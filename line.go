@@ -5,6 +5,13 @@ type LineCompute interface {
 	Compute(b *Board) (int, error)
 }
 
+//DefaultLineCompute Default Line Computer
+var DefaultLineCompute LineCompute
+
+func init() {
+	DefaultLineCompute = new(NormalLine)
+}
+
 //NormalLine TODO
 type NormalLine struct {
 }

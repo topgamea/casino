@@ -38,14 +38,13 @@ type Node struct {
 }
 
 //Create :New a Casino instance
-func Create(configFile string, lc LineCompute) (*Casino, error) {
+func Create(configFile string) (*Casino, error) {
 	casino := new(Casino)
 	c, err := ParseCasinoConfig(configFile)
 	if err != nil {
 		return nil, err
 	}
 	casino.Config = c
-	casino.LC = lc
 	config = c
 	return casino, nil
 }
@@ -53,7 +52,7 @@ func Create(configFile string, lc LineCompute) (*Casino, error) {
 //NewNode :Create a Node instance For Player or Room Used To Play Casino
 //Default: NodeType == Personl
 //In the future, we can Pass Node Type in the Params To the NewNode function
-func (c *Casino) NewNode() (*Node, error) {
+func (c *Casino) NewNode(lc LineCompute) (*Node, error) {
 	n := new(Node)
 	n.Type = Personal
 	rm, err := NewRunnerManage(n)
@@ -66,7 +65,7 @@ func (c *Casino) NewNode() (*Node, error) {
 		return nil, err
 	}
 	n.BM = bm
-	n.LC = c.LC
+	n.LC = lc
 	return n, nil
 }
 

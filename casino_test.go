@@ -8,11 +8,11 @@ import (
 
 func TestCasino(t *testing.T) {
 	tmpFileName := "./config_tmp.json"
-	c, err := Create(tmpFileName, new(NormalLine))
+	c, err := Create(tmpFileName)
 	if err != nil {
 		t.Errorf("create casino object error: %v", err)
 	}
-	node, err := c.NewNode()
+	node, err := c.NewNode(DefaultLineCompute)
 	if err != nil {
 		t.Errorf("casino new node error: %v", err)
 	}
