@@ -14,8 +14,9 @@ import (
 //Casino :Long Time Running Casino instance, Create New Node and Save some Global Constants or Variables or Context
 //In the future, we can use a Pool of Nodes to improve the Performance
 type Casino struct {
-	Config *Config
-	LC     LineCompute
+	Config         *Config
+	FrontendConfig *FrontendConfig
+	LC             LineCompute
 }
 
 //NodeType :Type of Node
@@ -40,12 +41,14 @@ type Node struct {
 //Create :New a Casino instance
 func Create(configFile string) (*Casino, error) {
 	casino := new(Casino)
-	c, err := ParseCasinoConfig(configFile)
+	c, fc, err := ParseCasinoConfig(configFile)
 	if err != nil {
 		return nil, err
 	}
 	casino.Config = c
+	casino.FrontendConfig = fc
 	config = c
+	frontendConfig = fc
 	return casino, nil
 }
 

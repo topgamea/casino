@@ -8,7 +8,7 @@ import (
 
 func TestConfig(t *testing.T) {
 	tmpFileName := "./config_tmp.json"
-	c, err := ParseCasinoConfig(tmpFileName)
+	c, _, err := ParseCasinoConfig(tmpFileName)
 	if err != nil {
 		t.Errorf("parse casino config error: %v", err)
 	}
