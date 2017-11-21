@@ -45,8 +45,8 @@ type ObtainConfig struct {
 //BoardConfig TODO
 type BoardConfig struct {
 	ID     int   `json:"id"`
-	Btype  int   `json:"btype,omitempty"`
-	Payout int   `json:"payout,omitempty"`
+	Btype  int   `json:"btype"`
+	Payout int   `json:"payout"`
 	Rows   int   `json:"rows,omitempty"`
 	Colums int   `json:"colums,omitempty"`
 	Slots  []int `json:"slots,omitempty"`
@@ -69,8 +69,8 @@ type originCasinoConfig struct {
 
 type originBoardConfig struct {
 	ID     int    `json:"id"`
-	Btype  int    `json:"btype,omitempty"`
-	Payout int    `json:"payout,omitempty"`
+	Btype  int    `json:"btype"`
+	Payout int    `json:"payout"`
 	Data   string `json:"data,omitempty"`
 }
 
