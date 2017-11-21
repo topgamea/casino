@@ -15,6 +15,8 @@ var frontendConfig *FrontendConfig
 type Config struct {
 	Rows          int                   `json:"rows,omitempty"`
 	Columns       int                   `json:"columns,omitempty"`
+	Bets          []int                 `json:"bets,omitempty"`
+	ScoreBase     int                   `json:"score_base,omitempty"`
 	LinesConfig   []*LineConfig         `json:"lines,omitempty"`
 	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
 	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
@@ -25,6 +27,8 @@ type Config struct {
 type FrontendConfig struct {
 	Rows          int                   `json:"rows,omitempty"`
 	Columns       int                   `json:"columns,omitempty"`
+	Bets          []int                 `json:"bets,omitempty"`
+	ScoreBase     int                   `json:"score_base,omitempty"`
 	LinesConfig   [][]int               `json:"lines,omitempty"`
 	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
 	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
@@ -59,12 +63,14 @@ type GearConfig struct {
 }
 
 type originCasinoConfig struct {
-	Rows    int                 `json:"rows,omitempty"`
-	Columns int                 `json:"columns,omitempty"`
-	Lines   []string            `json:"lines,omitempty"`
-	Obtains []string            `json:"obtains,omitempty"`
-	Boards  []originBoardConfig `json:"boards,omitempty"`
-	Gears   []originGearConfig  `json:"gears,omitempty"`
+	Rows      int                 `json:"rows,omitempty"`
+	Columns   int                 `json:"columns,omitempty"`
+	Bets      []int               `json:"bets,omitempty"`
+	ScoreBase int                 `json:"score_base,omitempty"`
+	Lines     []string            `json:"lines,omitempty"`
+	Obtains   []string            `json:"obtains,omitempty"`
+	Boards    []originBoardConfig `json:"boards,omitempty"`
+	Gears     []originGearConfig  `json:"gears,omitempty"`
 }
 
 type originBoardConfig struct {
@@ -97,6 +103,8 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config := new(Config)
 	config.Rows = originConfig.Rows
 	config.Columns = originConfig.Columns
+	config.Bets = originConfig.Bets
+	config.ScoreBase = originConfig.ScoreBase
 	config.LinesConfig = make([]*LineConfig, 0)
 	config.ObtainsConfig = make(map[int]*ObtainConfig)
 	config.BoardsConfig = make(map[int]*BoardConfig)
@@ -105,6 +113,8 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig := new(FrontendConfig)
 	frontendConfig.Rows = originConfig.Rows
 	frontendConfig.Columns = originConfig.Columns
+	frontendConfig.Bets = originConfig.Bets
+	frontendConfig.ScoreBase = originConfig.ScoreBase
 	frontendConfig.LinesConfig = make([][]int, 0)
 	frontendConfig.ObtainsConfig = make(map[int]*ObtainConfig)
 	frontendConfig.BoardsConfig = make(map[int]*BoardConfig)

@@ -15,6 +15,9 @@ func TestConfig(t *testing.T) {
 	//check rows columns
 	assert.Equal(t, 3, c.Rows, "rows not matched")
 	assert.Equal(t, 3, c.Columns, "columns not matched")
+	//check bets
+	assert.Equal(t, 5000, c.ScoreBase, "score base not matched")
+	assert.Equal(t, []int{1, 5, 10, 15, 20}, c.Bets, "bets not matched")
 	//check lines config
 	assert.Equal(t, 3, len(c.LinesConfig), "line config length not matched")
 	assert.Equal(t, []int{1, 1, 1}, c.LinesConfig[0].Line, "line config one line data not matched")
