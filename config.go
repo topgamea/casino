@@ -192,5 +192,5 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		frontendConfig.GearsConfig[gc.ID] = gc
 	}
 
-	return config, nil, nil
+	return config, frontendConfig, nil
 }
