@@ -38,13 +38,13 @@ type LineConfig struct {
 
 //ObtainConfig TODO
 type ObtainConfig struct {
-	ID     int   `json:"id,omitempty"`
+	ID     int   `json:"id"`
 	Reward []int `json:"reward,omitempty"`
 }
 
 //BoardConfig TODO
 type BoardConfig struct {
-	ID     int   `json:"id,omitempty"`
+	ID     int   `json:"id"`
 	Btype  int   `json:"btype,omitempty"`
 	Payout int   `json:"payout,omitempty"`
 	Rows   int   `json:"rows,omitempty"`
@@ -54,7 +54,7 @@ type BoardConfig struct {
 
 //GearConfig TODO
 type GearConfig struct {
-	ID      int   `json:"id,omitempty"`
+	ID      int   `json:"id"`
 	Symbols []int `json:"symbols,omitempty"`
 }
 
@@ -68,14 +68,14 @@ type originCasinoConfig struct {
 }
 
 type originBoardConfig struct {
-	ID     int    `json:"id,omitempty"`
+	ID     int    `json:"id"`
 	Btype  int    `json:"btype,omitempty"`
 	Payout int    `json:"payout,omitempty"`
 	Data   string `json:"data,omitempty"`
 }
 
 type originGearConfig struct {
-	ID   int    `json:"id,omitempty"`
+	ID   int    `json:"id"`
 	Data string `json:"data,omitempty"`
 }
 
