@@ -13,12 +13,12 @@ var frontendConfig *FrontendConfig
 
 //Config TODO
 type Config struct {
-	Rows          int
-	Columns       int
-	LinesConfig   []*LineConfig
-	ObtainsConfig map[int]*ObtainConfig
-	BoardsConfig  map[int]*BoardConfig
-	GearsConfig   map[int]*GearConfig
+	Rows          int                   `json:"rows,omitempty"`
+	Columns       int                   `json:"columns,omitempty"`
+	LinesConfig   []*LineConfig         `json:"lines,omitempty"`
+	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
+	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
+	GearsConfig   map[int]*GearConfig   `json:"gears,omitempty"`
 }
 
 //FrontendConfig TODO
@@ -33,29 +33,29 @@ type FrontendConfig struct {
 
 //LineConfig TODO
 type LineConfig struct {
-	Line []int
+	Line []int `json:"line,omitempty"`
 }
 
 //ObtainConfig TODO
 type ObtainConfig struct {
-	ID     int
-	Reward []int
+	ID     int   `json:"id,omitempty"`
+	Reward []int `json:"reward,omitempty"`
 }
 
 //BoardConfig TODO
 type BoardConfig struct {
-	ID     int
-	Btype  int
-	Payout int
-	Rows   int
-	Colums int
-	Slots  []int
+	ID     int   `json:"id,omitempty"`
+	Btype  int   `json:"btype,omitempty"`
+	Payout int   `json:"payout,omitempty"`
+	Rows   int   `json:"rows,omitempty"`
+	Colums int   `json:"colums,omitempty"`
+	Slots  []int `json:"slots,omitempty"`
 }
 
 //GearConfig TODO
 type GearConfig struct {
-	ID      int
-	Symbols []int
+	ID      int   `json:"id,omitempty"`
+	Symbols []int `json:"symbols,omitempty"`
 }
 
 type originCasinoConfig struct {
