@@ -22,3 +22,11 @@ func (c *Context) RemovePair(key string, value interface{}) error {
 	delete(c.KV, key)
 	return nil
 }
+
+//GetValue TODO
+func (c *Context) GetValue(key string) (interface{}, error) {
+	if _, ok := c.KV[key]; !ok {
+		return nil, errors.New("pair not exist")
+	}
+	return c.KV[key], nil
+}
