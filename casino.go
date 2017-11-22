@@ -19,26 +19,6 @@ type Casino struct {
 	LC             LineCompute
 }
 
-//NodeType :Type of Node
-type NodeType int
-
-const (
-	_ NodeType = iota
-	//Personal Node just for the Single Person
-	Personal
-	//Room Node just for the Room (Multi Players)
-	Room
-)
-
-//Node :New a Node for every player or room to Play casino
-type Node struct {
-	Type NodeType
-	RM   *RunnerManage
-	BM   *BoardManage
-	LC   LineCompute
-	FG   FrontendGears
-}
-
 //Create :New a Casino instance
 func Create(configFile string) (*Casino, error) {
 	casino := new(Casino)
@@ -72,6 +52,15 @@ func (c *Casino) NewNode(lc LineCompute) (*Node, error) {
 	n.LC = lc
 	n.FG = DefaultFrontendGears
 	return n, nil
+}
+
+//Node :New a Node for every player or room to Play casino
+type Node struct {
+	Type NodeType
+	RM   *RunnerManage
+	BM   *BoardManage
+	LC   LineCompute
+	FG   FrontendGears
 }
 
 //Play :Start or Init the Node

@@ -16,5 +16,8 @@ func (slot *Slot) AddRunner(runner *Runner) error {
 
 //GetSymbol Default: Return the Symbol of the watched runner, Special: Return the Locked Symbol or some Special Symbols
 func (slot *Slot) GetSymbol() int {
+	if slot.Runner == nil {
+		return 0
+	}
 	return slot.Runner.GetSymbol(slot.Which)
 }

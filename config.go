@@ -15,6 +15,7 @@ var frontendConfig *FrontendConfig
 type Config struct {
 	Rows          int                   `json:"rows,omitempty"`
 	Columns       int                   `json:"columns,omitempty"`
+	ExtraNum      int                   `json:"extraNum,omitempty"`
 	Bets          []int                 `json:"bets,omitempty"`
 	ScoreBase     int                   `json:"score_base,omitempty"`
 	LinesConfig   []*LineConfig         `json:"lines,omitempty"`
@@ -27,6 +28,7 @@ type Config struct {
 type FrontendConfig struct {
 	Rows          int                   `json:"rows,omitempty"`
 	Columns       int                   `json:"columns,omitempty"`
+	ExtraNum      int                   `json:"extraNum,omitempty"`
 	Bets          []int                 `json:"bets,omitempty"`
 	ScoreBase     int                   `json:"score_base,omitempty"`
 	LinesConfig   [][]int               `json:"lines,omitempty"`
@@ -53,6 +55,7 @@ type BoardConfig struct {
 	Payout int   `json:"payout"`
 	Rows   int   `json:"rows,omitempty"`
 	Colums int   `json:"colums,omitempty"`
+	Gears  []int `json:"gears,omitempty"`
 	Slots  []int `json:"slots,omitempty"`
 }
 
@@ -65,6 +68,7 @@ type GearConfig struct {
 type originCasinoConfig struct {
 	Rows      int                 `json:"rows,omitempty"`
 	Columns   int                 `json:"columns,omitempty"`
+	ExtraNum  int                 `json:"extraNum,omitempty"`
 	Bets      []int               `json:"bets,omitempty"`
 	ScoreBase int                 `json:"score_base,omitempty"`
 	Lines     []string            `json:"lines,omitempty"`
@@ -103,6 +107,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config := new(Config)
 	config.Rows = originConfig.Rows
 	config.Columns = originConfig.Columns
+	config.ExtraNum = originConfig.ExtraNum
 	config.Bets = originConfig.Bets
 	config.ScoreBase = originConfig.ScoreBase
 	config.LinesConfig = make([]*LineConfig, 0)
@@ -113,6 +118,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig := new(FrontendConfig)
 	frontendConfig.Rows = originConfig.Rows
 	frontendConfig.Columns = originConfig.Columns
+	frontendConfig.ExtraNum = originConfig.ExtraNum
 	frontendConfig.Bets = originConfig.Bets
 	frontendConfig.ScoreBase = originConfig.ScoreBase
 	frontendConfig.LinesConfig = make([][]int, 0)
@@ -163,6 +169,8 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		bc.Rows = config.Rows
 		bc.Colums = config.Columns
 		slots := make([]int, config.Rows*config.Columns)
+		bc.Gears = make([]int, 0)
+		checkGears := make(map[int]int)
 		for _, coorAndGear := range strings.Split(board.Data, ",") {
 			coor := strings.Split(coorAndGear, ":")[0]
 			gear := strings.Split(coorAndGear, ":")[1]
@@ -181,6 +189,10 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 				return nil, nil, err
 			}
 			slots[(coorXi-1)*bc.Colums+(coorYi-1)] = geari
+			if _, ok := checkGears[geari]; !ok {
+				checkGears[geari] = 1
+				bc.Gears = append(bc.Gears, geari)
+			}
 		}
 		bc.Slots = slots
 		config.BoardsConfig[board.ID] = bc
