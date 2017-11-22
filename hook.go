@@ -1,7 +1,7 @@
 package casino
 
-type HookFunc func(c *Context)
+// type HookFunc func(c *Context)
 
-func RegisterHook() {
+// func RegisterHook() {
 
-}
+// }
