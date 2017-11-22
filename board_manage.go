@@ -2,8 +2,9 @@ package casino
 
 //BoardManage Manage different boards
 type BoardManage struct {
-	Boards map[int]*Board
-	Parent *Node
+	Boards     map[int]*Board
+	Parent     *Node
+	NowBoardID int
 }
 
 //NewBoardManage New a Board Manager
@@ -16,6 +17,7 @@ func NewBoardManage(n *Node) (*BoardManage, error) {
 
 //SwitchBoard Swith Board by different Board ID in the config file
 func (bm *BoardManage) SwitchBoard(boardID int) (*Board, error) {
+	bm.NowBoardID = boardID
 	if _, ok := bm.Boards[boardID]; ok {
 		return bm.Boards[boardID], nil
 	}
@@ -25,6 +27,9 @@ func (bm *BoardManage) SwitchBoard(boardID int) (*Board, error) {
 		return nil, err
 	}
 	for i := 0; i < boardConfig.Rows*boardConfig.Colums; i++ {
+		if boardConfig.Slots[i] == 0 {
+			continue
+		}
 		r, err := bm.Parent.RM.AddRunner(boardConfig.Slots[i])
 		if err != nil {
 			return nil, err

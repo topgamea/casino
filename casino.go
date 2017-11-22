@@ -36,6 +36,7 @@ type Node struct {
 	RM   *RunnerManage
 	BM   *BoardManage
 	LC   LineCompute
+	FG   FrontendGears
 }
 
 //Create :New a Casino instance
@@ -69,6 +70,7 @@ func (c *Casino) NewNode(lc LineCompute) (*Node, error) {
 	}
 	n.BM = bm
 	n.LC = lc
+	n.FG = DefaultFrontendGears
 	return n, nil
 }
 
@@ -86,7 +88,7 @@ func (n *Node) Play() (int, error) {
 		return 0, err
 	}
 	//Compute line reward
-	reward, err := n.LC.Compute(b)
+	reward, _, _, err := n.LC.Compute(b)
 	if err != nil {
 		return 0, err
 	}

@@ -25,11 +25,11 @@ func TestConfig(t *testing.T) {
 	assert.Equal(t, []int{3, 3, 3}, c.LinesConfig[2].Line, "line config one line data not matched")
 	//check obtains config
 	assert.Equal(t, []int{0, 500, 1000, 2000, 5000}, c.ObtainsConfig[0].Reward, "obtain config one obtain not matched")
-	assert.Equal(t, []int{0, 500, 1000, 2000, 5000}, c.ObtainsConfig[1].Reward, "obtain config one obtain not matched")
-	assert.Equal(t, []int{0, 500, 1000, 2000, 5000}, c.ObtainsConfig[2].Reward, "obtain config one obtain not matched")
-	assert.Equal(t, []int{0, 500, 1000, 2000, 5000}, c.ObtainsConfig[3].Reward, "obtain config one obtain not matched")
+	assert.Equal(t, []int{100, 500, 1000, 2000, 5000}, c.ObtainsConfig[1].Reward, "obtain config one obtain not matched")
+	assert.Equal(t, []int{200, 500, 1000, 2000, 5000}, c.ObtainsConfig[2].Reward, "obtain config one obtain not matched")
+	assert.Equal(t, []int{300, 500, 1000, 2000, 5000}, c.ObtainsConfig[3].Reward, "obtain config one obtain not matched")
 	//check boards config
-	assert.Equal(t, []int{6, 6, 6, 6, 6, 6, 6, 6, 6}, c.BoardsConfig[1].Slots, "boards config one board slots not matched")
+	assert.Equal(t, []int{6, 7, 8, 6, 7, 8, 6, 7, 8}, c.BoardsConfig[1].Slots, "boards config one board slots not matched")
 	assert.Equal(t, []int{1, 2, 3, 1, 2, 3, 1, 2, 4}, c.BoardsConfig[2].Slots, "boards config one board slots not matched")
 	assert.Equal(t, []int{1, 2, 3, 1, 2, 3, 1, 2, 4}, c.BoardsConfig[3].Slots, "boards config one board slots not matched")
 	assert.Equal(t, []int{1, 2, 3, 1, 2, 3, 1, 2, 4}, c.BoardsConfig[4].Slots, "boards config one board slots not matched")

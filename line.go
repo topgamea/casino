@@ -2,7 +2,7 @@ package casino
 
 //LineCompute TODO
 type LineCompute interface {
-	Compute(b *Board) (int, error)
+	Compute(b *Board) (reward int, lines []int, linesItems [][]int, err error)
 }
 
 //DefaultLineCompute Default Line Computer
@@ -17,10 +17,13 @@ type NormalLine struct {
 }
 
 //Compute TODO
-func (l *NormalLine) Compute(b *Board) (int, error) {
+func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 	lineSlots := make([]*Slot, b.Columns)
+	lines := make([]int, 0)
+	lineItems := make([][]int, 0)
 	reward := 0
-	for _, lineConfig := range config.LinesConfig {
+	for lineIndex, lineConfig := range config.LinesConfig {
+		items := make([]int, 0)
 		column := 1
 		for _, row := range lineConfig.Line {
 			lineSlots[column-1] = b.Slots[(row-1)*b.Columns+column-1]
@@ -36,6 +39,7 @@ func (l *NormalLine) Compute(b *Board) (int, error) {
 		totalCount := 0
 		for _, s := range lineSlots {
 			if s.GetSymbol() == firstSymbol {
+				items = append(items, totalCount)
 				totalCount++
 			} else {
 				break
@@ -44,7 +48,9 @@ func (l *NormalLine) Compute(b *Board) (int, error) {
 		obtainConfig := config.ObtainsConfig[firstSymbol]
 		if obtainConfig.Reward[totalCount-1] != 0 {
 			reward += obtainConfig.Reward[totalCount-1]
+			lines = append(lines, lineIndex)
+			lineItems = append(lineItems, items)
 		}
 	}
-	return reward, nil
+	return reward, lines, lineItems, nil
 }
