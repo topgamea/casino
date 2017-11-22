@@ -36,7 +36,7 @@ func Create(configFile string) (*Casino, error) {
 //NewNode :Create a Node instance For Player or Room Used To Play Casino
 //Default: NodeType == Personl
 //In the future, we can Pass Node Type in the Params To the NewNode function
-func (c *Casino) NewNode(lc LineCompute) (*Node, error) {
+func (c *Casino) NewNode(lc LineCompute, nf FrontendGears) (*Node, error) {
 	n := new(Node)
 	n.Type = Personal
 	rm, err := NewRunnerManage(n)
@@ -50,17 +50,40 @@ func (c *Casino) NewNode(lc LineCompute) (*Node, error) {
 	}
 	n.BM = bm
 	n.LC = lc
-	n.FG = DefaultFrontendGears
+	n.FG = nf
+	n.HC = new(HookChain)
+	n.C = &Context{}
 	return n, nil
 }
 
 //Node :New a Node for every player or room to Play casino
 type Node struct {
 	Type NodeType
+	C    *Context
+	HC   *HookChain
 	RM   *RunnerManage
 	BM   *BoardManage
 	LC   LineCompute
 	FG   FrontendGears
+}
+
+//RegisterDefaultHooks TODO
+func (n *Node) RegisterDefaultHooks() {
+	n.RegisterHook(play)
+}
+
+//RegisterHook TODO
+func (n *Node) RegisterHook(hf HookFunc) {
+	n.HC.addHook(hf)
+}
+
+//Execute TODO
+func (n *Node) Execute() error {
+	err := n.HC.execute(n.C)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //Play :Start or Init the Node

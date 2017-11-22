@@ -1,7 +1,24 @@
 package casino
 
-// type HookFunc func(c *Context)
+//HookFunc TODO
+type HookFunc func(*Context) error
 
-// func RegisterHook() {
+//HookChain TODO
+type HookChain struct {
+	Hooks []HookFunc
+}
 
-// }
+func (hc *HookChain) addHook(hookF HookFunc) error {
+	hc.Hooks = append(hc.Hooks, hookF)
+	return nil
+}
+
+func (hc *HookChain) execute(c *Context) error {
+	for _, hookFunc := range hc.Hooks {
+		err := hookFunc(c)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

@@ -12,7 +12,7 @@ func TestCasino(t *testing.T) {
 	if err != nil {
 		t.Errorf("create casino object error: %v", err)
 	}
-	node, err := c.NewNode(DefaultLineCompute)
+	node, err := c.NewNode(DefaultLineCompute, DefaultFrontendGears)
 	if err != nil {
 		t.Errorf("casino new node error: %v", err)
 	}
