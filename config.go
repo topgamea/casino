@@ -22,6 +22,7 @@ type Config struct {
 	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
 	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
 	GearsConfig   map[int]*GearConfig   `json:"gears,omitempty"`
+	WildConfig    *WildConfig           `json:"wild,omitempty"`
 }
 
 //FrontendConfig TODO
@@ -35,6 +36,7 @@ type FrontendConfig struct {
 	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
 	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
 	GearsConfig   map[int]*GearConfig   `json:"gears,omitempty"`
+	WildConfig    *WildConfig           `json:"wild,omitempty"`
 }
 
 //LineConfig TODO
@@ -65,6 +67,12 @@ type GearConfig struct {
 	Symbols []int `json:"symbols,omitempty"`
 }
 
+//WildConfig TODO
+type WildConfig struct {
+	IDs    []int `json:"ids"`
+	Except []int `json:"except"`
+}
+
 type originCasinoConfig struct {
 	Rows      int                 `json:"rows,omitempty"`
 	Columns   int                 `json:"columns,omitempty"`
@@ -75,6 +83,7 @@ type originCasinoConfig struct {
 	Obtains   []string            `json:"obtains,omitempty"`
 	Boards    []originBoardConfig `json:"boards,omitempty"`
 	Gears     []originGearConfig  `json:"gears,omitempty"`
+	Wild      originWildConfig    `json:"wild,omitempty"`
 }
 
 type originBoardConfig struct {
@@ -87,6 +96,11 @@ type originBoardConfig struct {
 type originGearConfig struct {
 	ID   int    `json:"id"`
 	Data string `json:"data,omitempty"`
+}
+
+type originWildConfig struct {
+	IDs    string `json:"ids"`
+	Except string `json:"except"`
 }
 
 //ParseCasinoConfig TODO
@@ -104,6 +118,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	if err != nil {
 		return nil, nil, err
 	}
+	wildConfig := new(WildConfig)
 	config := new(Config)
 	config.Rows = originConfig.Rows
 	config.Columns = originConfig.Columns
@@ -114,6 +129,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config.ObtainsConfig = make(map[int]*ObtainConfig)
 	config.BoardsConfig = make(map[int]*BoardConfig)
 	config.GearsConfig = make(map[int]*GearConfig)
+	config.WildConfig = wildConfig
 
 	frontendConfig := new(FrontendConfig)
 	frontendConfig.Rows = originConfig.Rows
@@ -125,6 +141,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig.ObtainsConfig = make(map[int]*ObtainConfig)
 	frontendConfig.BoardsConfig = make(map[int]*BoardConfig)
 	frontendConfig.GearsConfig = make(map[int]*GearConfig)
+	frontendConfig.WildConfig = wildConfig
 
 	//add lines config
 	for _, line := range originConfig.Lines {
@@ -213,6 +230,26 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		config.GearsConfig[gc.ID] = gc
 		frontendConfig.GearsConfig[gc.ID] = gc
 	}
+	//add wild config
+	owc := originConfig.Wild
+	ids := make([]int, 0)
+	except := make([]int, 0)
+	for _, idStr := range strings.Split(owc.IDs, ",") {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return nil, nil, err
+		}
+		ids = append(ids, id)
+	}
+	for _, exceptStr := range strings.Split(owc.Except, ",") {
+		exceptInt, err := strconv.Atoi(exceptStr)
+		if err != nil {
+			return nil, nil, err
+		}
+		except = append(except, exceptInt)
+	}
+	wildConfig.IDs = ids
+	wildConfig.Except = except
 
 	return config, frontendConfig, nil
 }

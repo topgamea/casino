@@ -38,7 +38,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 		//Analyse how many times the first symbol show
 		totalCount := 0
 		for _, s := range lineSlots {
-			if s.GetSymbol() == firstSymbol {
+			if s.GetSymbol() == firstSymbol || WildReplace(config.WildConfig.IDs, config.WildConfig.Except, s.GetSymbol(), firstSymbol) {
 				items = append(items, totalCount)
 				totalCount++
 			} else {
