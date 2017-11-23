@@ -5,11 +5,24 @@ import (
 	"time"
 )
 
+func checkBoard(c *Context) error {
+	err := c.AddPair("boardID", 1)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func play(c *Context) error {
 	rand.Seed(time.Now().UnixNano())
 	n := c.N
+	//get board id
+	boardID, err := c.GetValue("boardID")
+	if err != nil {
+		return err
+	}
 	//Choose an Appropriate Board, default 1# board
-	b, err := n.BM.SwitchBoard(1)
+	b, err := n.BM.SwitchBoard(boardID.(int))
 	if err != nil {
 		return err
 	}
