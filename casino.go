@@ -52,7 +52,7 @@ func (c *Casino) NewNode(lc LineCompute, nf FrontendGears) (*Node, error) {
 	n.LC = lc
 	n.FG = nf
 	n.HC = new(HookChain)
-	n.C = &Context{}
+	n.C = &Context{N: n, KV: make(map[string]interface{})}
 	return n, nil
 }
 
