@@ -29,13 +29,13 @@ func (nfg *NormalFrontendGears) GetGearWithItems(b *Board) ([][]int, []int) {
 		if _, ok := gears[gearID]; ok {
 			continue
 		}
-		startPos := s.Runner.NowPos - 2
+		startPos := s.Runner.NowPos - 2*config.ExtraNum
 		if startPos < 0 {
 			startPos = len(config.GearsConfig[gearID].Symbols) + startPos
 		}
-		items := make([]int, s.Runner.Vision+2)
+		items := make([]int, s.Runner.Vision+2*config.ExtraNum)
 		nextPosition := startPos
-		for i := 0; i < s.Runner.Vision+2; i++ {
+		for i := 0; i < s.Runner.Vision+2*config.ExtraNum; i++ {
 			index := (startPos + i) % len(config.GearsConfig[gearID].Symbols)
 			items[i] = config.GearsConfig[gearID].Symbols[index]
 			nextPosition = (index + 1) % len(config.GearsConfig[gearID].Symbols)

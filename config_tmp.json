@@ -2,6 +2,7 @@
 {
 	"rows": 3,
 	"columns": 3,
+	"extraNum": 1,
 	"score_base":5000,
 	"bets":[1, 5, 10, 15, 20],
 	"lines": [
