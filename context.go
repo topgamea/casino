@@ -1,7 +1,5 @@
 package casino
 
-import "errors"
-
 //Context TODO
 type Context struct {
 	N  *Node
@@ -17,7 +15,7 @@ func (c *Context) AddPair(key string, value interface{}) error {
 //RemovePair TODO
 func (c *Context) RemovePair(key string, value interface{}) error {
 	if _, ok := c.KV[key]; !ok {
-		return errors.New("pair not exist")
+		return ErrPairNotExist
 	}
 	delete(c.KV, key)
 	return nil
@@ -26,7 +24,7 @@ func (c *Context) RemovePair(key string, value interface{}) error {
 //GetValue TODO
 func (c *Context) GetValue(key string) (interface{}, error) {
 	if _, ok := c.KV[key]; !ok {
-		return nil, errors.New("pair not exist")
+		return nil, ErrPairNotExist
 	}
 	return c.KV[key], nil
 }

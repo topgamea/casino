@@ -21,8 +21,10 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 	lineSlots := make([]*Slot, b.Columns)
 	lines := make([]int, 0)
 	lineItems := make([][]int, 0)
+	lineItemsIndex := make([][]int, 0)
 	reward := 0
 	for lineIndex, lineConfig := range config.LinesConfig {
+		itemsIndex := make([]int, 0)
 		items := make([]int, 0)
 		column := 1
 		for _, row := range lineConfig.Line {
@@ -39,7 +41,8 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 		totalCount := 0
 		for _, s := range lineSlots {
 			if s.GetSymbol() == firstSymbol || WildReplace(config.WildConfig.IDs, config.WildConfig.Except, s.GetSymbol(), firstSymbol) {
-				items = append(items, totalCount)
+				itemsIndex = append(itemsIndex, totalCount)
+				items = append(items, firstSymbol)
 				totalCount++
 			} else {
 				break
@@ -49,8 +52,9 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 		if obtainConfig.Reward[totalCount-1] != 0 {
 			reward += obtainConfig.Reward[totalCount-1]
 			lines = append(lines, lineIndex)
+			lineItemsIndex = append(lineItemsIndex, itemsIndex)
 			lineItems = append(lineItems, items)
 		}
 	}
-	return reward, lines, lineItems, nil
+	return reward, lines, lineItemsIndex, nil
 }

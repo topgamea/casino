@@ -6,7 +6,11 @@ import (
 )
 
 func checkBoard(c *Context) error {
-	err := c.AddPair("boardID", 1)
+	_, err := c.GetValue("boardID")
+	if err != ErrPairNotExist {
+		return err
+	}
+	err = c.AddPair("boardID", 1)
 	if err != nil {
 		return err
 	}
