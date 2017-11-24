@@ -18,7 +18,7 @@ type NormalFrontendGears struct {
 
 //GetGearWithItems GearID=>GearItemsArray, nextPosition
 func (nfg *NormalFrontendGears) GetGearWithItems(b *Board) ([][]int, []int) {
-	gears := make(map[int]int)
+	gears := make(map[string]int)
 	frontendGears := make([][]int, 0)
 	nextPositions := make([]int, 0)
 	for _, s := range b.Slots {

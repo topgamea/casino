@@ -6,8 +6,8 @@ import (
 
 //Runner TODO
 type Runner struct {
-	ID       int
-	BindGear int
+	ID       string
+	BindGear string
 	NowPos   int
 	Vision   int
 }

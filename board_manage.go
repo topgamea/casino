@@ -27,7 +27,7 @@ func (bm *BoardManage) SwitchBoard(boardID int) (*Board, error) {
 		return nil, err
 	}
 	for i := 0; i < boardConfig.Rows*boardConfig.Colums; i++ {
-		if boardConfig.Slots[i] == 0 {
+		if boardConfig.Slots[i] == "" {
 			continue
 		}
 		r, err := bm.Parent.RM.AddRunner(boardConfig.Slots[i])

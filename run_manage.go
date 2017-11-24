@@ -6,7 +6,7 @@ import (
 
 //RunnerManage TODO
 type RunnerManage struct {
-	Runners map[int]*Runner
+	Runners map[string]*Runner
 	Parent  *Node
 	Locker  sync.Mutex
 }
@@ -14,13 +14,13 @@ type RunnerManage struct {
 //NewRunnerManage TODO
 func NewRunnerManage(n *Node) (*RunnerManage, error) {
 	rm := new(RunnerManage)
-	rm.Runners = make(map[int]*Runner)
+	rm.Runners = make(map[string]*Runner)
 	rm.Parent = n
 	return rm, nil
 }
 
 //AddRunner TODO
-func (rm *RunnerManage) AddRunner(id int) (*Runner, error) {
+func (rm *RunnerManage) AddRunner(id string) (*Runner, error) {
 	if _, ok := rm.Runners[id]; ok {
 		return rm.Runners[id], nil
 	}

@@ -13,30 +13,30 @@ var frontendConfig *FrontendConfig
 
 //Config TODO
 type Config struct {
-	Rows          int                   `json:"rows,omitempty"`
-	Columns       int                   `json:"columns,omitempty"`
-	ExtraNum      int                   `json:"extraNum,omitempty"`
-	Bets          []int                 `json:"bets,omitempty"`
-	ScoreBase     int                   `json:"score_base,omitempty"`
-	LinesConfig   []*LineConfig         `json:"lines,omitempty"`
-	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
-	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
-	GearsConfig   map[int]*GearConfig   `json:"gears,omitempty"`
-	WildConfig    *WildConfig           `json:"wild,omitempty"`
+	Rows          int                    `json:"rows,omitempty"`
+	Columns       int                    `json:"columns,omitempty"`
+	ExtraNum      int                    `json:"extraNum,omitempty"`
+	Bets          []int                  `json:"bets,omitempty"`
+	ScoreBase     int                    `json:"score_base,omitempty"`
+	LinesConfig   []*LineConfig          `json:"lines,omitempty"`
+	ObtainsConfig map[int]*ObtainConfig  `json:"obtains,omitempty"`
+	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
+	GearsConfig   map[string]*GearConfig `json:"gears,omitempty"`
+	WildConfig    *WildConfig            `json:"wild,omitempty"`
 }
 
 //FrontendConfig TODO
 type FrontendConfig struct {
-	Rows          int                   `json:"rows,omitempty"`
-	Columns       int                   `json:"columns,omitempty"`
-	ExtraNum      int                   `json:"extraNum,omitempty"`
-	Bets          []int                 `json:"bets,omitempty"`
-	ScoreBase     int                   `json:"score_base,omitempty"`
-	LinesConfig   [][]int               `json:"lines,omitempty"`
-	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
-	BoardsConfig  map[int]*BoardConfig  `json:"boards,omitempty"`
-	GearsConfig   map[int]*GearConfig   `json:"gears,omitempty"`
-	WildConfig    *WildConfig           `json:"wild,omitempty"`
+	Rows          int                    `json:"rows,omitempty"`
+	Columns       int                    `json:"columns,omitempty"`
+	ExtraNum      int                    `json:"extraNum,omitempty"`
+	Bets          []int                  `json:"bets,omitempty"`
+	ScoreBase     int                    `json:"score_base,omitempty"`
+	LinesConfig   [][]int                `json:"lines,omitempty"`
+	ObtainsConfig map[int]*ObtainConfig  `json:"obtains,omitempty"`
+	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
+	GearsConfig   map[string]*GearConfig `json:"gears,omitempty"`
+	WildConfig    *WildConfig            `json:"wild,omitempty"`
 }
 
 //LineConfig TODO
@@ -52,19 +52,19 @@ type ObtainConfig struct {
 
 //BoardConfig TODO
 type BoardConfig struct {
-	ID     int   `json:"id"`
-	Btype  int   `json:"btype"`
-	Payout int   `json:"payout"`
-	Rows   int   `json:"rows,omitempty"`
-	Colums int   `json:"colums,omitempty"`
-	Gears  []int `json:"gears,omitempty"`
-	Slots  []int `json:"slots,omitempty"`
+	ID     int      `json:"id"`
+	Btype  int      `json:"btype"`
+	Payout int      `json:"payout"`
+	Rows   int      `json:"rows,omitempty"`
+	Colums int      `json:"colums,omitempty"`
+	Gears  []string `json:"gears,omitempty"`
+	Slots  []string `json:"slots,omitempty"`
 }
 
 //GearConfig TODO
 type GearConfig struct {
-	ID      int   `json:"id"`
-	Symbols []int `json:"symbols,omitempty"`
+	ID      string `json:"id"`
+	Symbols []int  `json:"symbols,omitempty"`
 }
 
 //WildConfig TODO
@@ -87,14 +87,14 @@ type originCasinoConfig struct {
 }
 
 type originBoardConfig struct {
-	ID     int    `json:"id"`
-	Btype  int    `json:"btype"`
-	Payout int    `json:"payout"`
-	Data   string `json:"data,omitempty"`
+	ID     int      `json:"id"`
+	Btype  int      `json:"btype"`
+	Payout int      `json:"payout"`
+	Data   []string `json:"data,omitempty"`
 }
 
 type originGearConfig struct {
-	ID   int    `json:"id"`
+	ID   string `json:"id"`
 	Data string `json:"data,omitempty"`
 }
 
@@ -128,7 +128,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config.LinesConfig = make([]*LineConfig, 0)
 	config.ObtainsConfig = make(map[int]*ObtainConfig)
 	config.BoardsConfig = make(map[int]*BoardConfig)
-	config.GearsConfig = make(map[int]*GearConfig)
+	config.GearsConfig = make(map[string]*GearConfig)
 	config.WildConfig = wildConfig
 
 	frontendConfig := new(FrontendConfig)
@@ -140,7 +140,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig.LinesConfig = make([][]int, 0)
 	frontendConfig.ObtainsConfig = make(map[int]*ObtainConfig)
 	frontendConfig.BoardsConfig = make(map[int]*BoardConfig)
-	frontendConfig.GearsConfig = make(map[int]*GearConfig)
+	frontendConfig.GearsConfig = make(map[string]*GearConfig)
 	frontendConfig.WildConfig = wildConfig
 
 	//add lines config
@@ -152,7 +152,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 			if err != nil {
 				return nil, nil, err
 			}
-			lc.Line = append(lc.Line, i)
+			lc.Line = append(lc.Line, i+1)
 		}
 		config.LinesConfig = append(config.LinesConfig, lc)
 		frontendConfig.LinesConfig = append(frontendConfig.LinesConfig, lc.Line)
@@ -185,10 +185,10 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		bc.Payout = board.Payout
 		bc.Rows = config.Rows
 		bc.Colums = config.Columns
-		slots := make([]int, config.Rows*config.Columns)
-		bc.Gears = make([]int, 0)
-		checkGears := make(map[int]int)
-		for _, coorAndGear := range strings.Split(board.Data, ",") {
+		slots := make([]string, config.Rows*config.Columns)
+		bc.Gears = make([]string, 0)
+		checkGears := make(map[string]int)
+		for _, coorAndGear := range board.Data {
 			coor := strings.Split(coorAndGear, ":")[0]
 			gear := strings.Split(coorAndGear, ":")[1]
 			coorX := strings.Split(coor, "-")[0]
@@ -201,14 +201,14 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 			if err != nil {
 				return nil, nil, err
 			}
-			geari, err := strconv.Atoi(gear)
-			if err != nil {
-				return nil, nil, err
-			}
-			slots[(coorXi-1)*bc.Colums+(coorYi-1)] = geari
-			if _, ok := checkGears[geari]; !ok {
-				checkGears[geari] = 1
-				bc.Gears = append(bc.Gears, geari)
+			// geari, err := strconv.Atoi(gear)
+			// if err != nil {
+			// 	return nil, nil, err
+			// }
+			slots[coorXi*bc.Colums+coorYi] = gear
+			if _, ok := checkGears[gear]; !ok {
+				checkGears[gear] = 1
+				bc.Gears = append(bc.Gears, gear)
 			}
 		}
 		bc.Slots = slots

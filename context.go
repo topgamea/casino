@@ -2,8 +2,9 @@ package casino
 
 //Context TODO
 type Context struct {
-	N  *Node
-	KV map[string]interface{}
+	N      *Node
+	GotoHC string
+	KV     map[string]interface{}
 }
 
 //AddPair TODO
