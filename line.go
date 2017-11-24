@@ -2,7 +2,7 @@ package casino
 
 //LineCompute TODO
 type LineCompute interface {
-	Compute(b *Board) (reward int, lines []int, linesItems [][]int, err error)
+	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][]int, err error)
 }
 
 //DefaultLineCompute Default Line Computer
