@@ -10,7 +10,7 @@ func checkBoard(c *Context) error {
 	if err != ErrPairNotExist {
 		return err
 	}
-	err = c.AddPair("boardID", "1")
+	err = c.AddPair("boardID", "0_9")
 	if err != nil {
 		return err
 	}
