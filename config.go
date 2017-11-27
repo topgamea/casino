@@ -13,30 +13,30 @@ var frontendConfig *FrontendConfig
 
 //Config TODO
 type Config struct {
-	Rows          int                    `json:"rows,omitempty"`
-	Columns       int                    `json:"columns,omitempty"`
-	ExtraNum      int                    `json:"extraNum,omitempty"`
-	Bets          []int                  `json:"bets,omitempty"`
-	ScoreBase     int                    `json:"score_base,omitempty"`
-	LinesConfig   []*LineConfig          `json:"lines,omitempty"`
-	ObtainsConfig map[int]*ObtainConfig  `json:"obtains,omitempty"`
-	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
-	GearsConfig   map[string]*GearConfig `json:"gears,omitempty"`
-	WildConfig    *WildConfig            `json:"wild,omitempty"`
+	Rows          int                     `json:"rows,omitempty"`
+	Columns       int                     `json:"columns,omitempty"`
+	ExtraNum      int                     `json:"extraNum,omitempty"`
+	Bets          []int                   `json:"bets,omitempty"`
+	ScoreBase     int                     `json:"score_base,omitempty"`
+	LinesConfig   []*LineConfig           `json:"lines,omitempty"`
+	ObtainsConfig map[int]*ObtainConfig   `json:"obtains,omitempty"`
+	BoardsConfig  map[string]*BoardConfig `json:"boards,omitempty"`
+	GearsConfig   map[string]*GearConfig  `json:"gears,omitempty"`
+	WildConfig    *WildConfig             `json:"wild,omitempty"`
 }
 
 //FrontendConfig TODO
 type FrontendConfig struct {
-	Rows          int                    `json:"rows,omitempty"`
-	Columns       int                    `json:"columns,omitempty"`
-	ExtraNum      int                    `json:"extraNum,omitempty"`
-	Bets          []int                  `json:"bets,omitempty"`
-	ScoreBase     int                    `json:"score_base,omitempty"`
-	LinesConfig   [][]int                `json:"lines,omitempty"`
-	ObtainsConfig map[int]*ObtainConfig  `json:"obtains,omitempty"`
-	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
-	GearsConfig   map[string]*GearConfig `json:"gears,omitempty"`
-	WildConfig    *WildConfig            `json:"wild,omitempty"`
+	Rows          int                   `json:"rows,omitempty"`
+	Columns       int                   `json:"columns,omitempty"`
+	ExtraNum      int                   `json:"extraNum,omitempty"`
+	Bets          []int                 `json:"bets,omitempty"`
+	ScoreBase     int                   `json:"score_base,omitempty"`
+	LinesConfig   [][]int               `json:"lines,omitempty"`
+	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
+	//	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
+	GearsConfig map[string]*GearConfig `json:"gears,omitempty"`
+	WildConfig  *WildConfig            `json:"wild,omitempty"`
 }
 
 //LineConfig TODO
@@ -52,7 +52,7 @@ type ObtainConfig struct {
 
 //BoardConfig TODO
 type BoardConfig struct {
-	ID     int      `json:"id"`
+	ID     string   `json:"id"`
 	Btype  int      `json:"btype"`
 	Payout int      `json:"payout"`
 	Rows   int      `json:"rows,omitempty"`
@@ -87,7 +87,7 @@ type originCasinoConfig struct {
 }
 
 type originBoardConfig struct {
-	ID     int      `json:"id"`
+	ID     string   `json:"id"`
 	Btype  int      `json:"btype"`
 	Payout int      `json:"payout"`
 	Data   []string `json:"data,omitempty"`
@@ -127,7 +127,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config.ScoreBase = originConfig.ScoreBase
 	config.LinesConfig = make([]*LineConfig, 0)
 	config.ObtainsConfig = make(map[int]*ObtainConfig)
-	config.BoardsConfig = make(map[int]*BoardConfig)
+	config.BoardsConfig = make(map[string]*BoardConfig)
 	config.GearsConfig = make(map[string]*GearConfig)
 	config.WildConfig = wildConfig
 
@@ -139,7 +139,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig.ScoreBase = originConfig.ScoreBase
 	frontendConfig.LinesConfig = make([][]int, 0)
 	frontendConfig.ObtainsConfig = make(map[int]*ObtainConfig)
-	frontendConfig.BoardsConfig = make(map[int]*BoardConfig)
+	//frontendConfig.BoardsConfig = make(map[string]*BoardConfig)
 	frontendConfig.GearsConfig = make(map[string]*GearConfig)
 	frontendConfig.WildConfig = wildConfig
 
@@ -213,7 +213,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		}
 		bc.Slots = slots
 		config.BoardsConfig[board.ID] = bc
-		frontendConfig.BoardsConfig[board.ID] = bc
+		//frontendConfig.BoardsConfig[board.ID] = bc
 	}
 	//add gears config
 	for _, gear := range originConfig.Gears {

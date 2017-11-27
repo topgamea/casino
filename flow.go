@@ -10,7 +10,7 @@ func checkBoard(c *Context) error {
 	if err != ErrPairNotExist {
 		return err
 	}
-	err = c.AddPair("boardID", 1)
+	err = c.AddPair("boardID", "1")
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func play(c *Context) error {
 		return err
 	}
 	//Choose an Appropriate Board, default 1# board
-	b, err := n.BM.SwitchBoard(boardID.(int))
+	b, err := n.BM.SwitchBoard(boardID.(string))
 	if err != nil {
 		return err
 	}

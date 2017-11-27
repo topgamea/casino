@@ -92,7 +92,7 @@ func (n *Node) Execute() error {
 func (n *Node) Play() (int, error) {
 	rand.Seed(time.Now().UnixNano())
 	//Choose an Appropriate Board, default 1# board
-	b, err := n.BM.SwitchBoard(1)
+	b, err := n.BM.SwitchBoard("1")
 	if err != nil {
 		return 0, err
 	}

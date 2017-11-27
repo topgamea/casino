@@ -2,21 +2,21 @@ package casino
 
 //BoardManage Manage different boards
 type BoardManage struct {
-	Boards     map[int]*Board
+	Boards     map[string]*Board
 	Parent     *Node
-	NowBoardID int
+	NowBoardID string
 }
 
 //NewBoardManage New a Board Manager
 func NewBoardManage(n *Node) (*BoardManage, error) {
 	bm := new(BoardManage)
-	bm.Boards = make(map[int]*Board)
+	bm.Boards = make(map[string]*Board)
 	bm.Parent = n
 	return bm, nil
 }
 
 //SwitchBoard Swith Board by different Board ID in the config file
-func (bm *BoardManage) SwitchBoard(boardID int) (*Board, error) {
+func (bm *BoardManage) SwitchBoard(boardID string) (*Board, error) {
 	bm.NowBoardID = boardID
 	if _, ok := bm.Boards[boardID]; ok {
 		return bm.Boards[boardID], nil

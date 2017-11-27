@@ -16,7 +16,7 @@ func TestCasino(t *testing.T) {
 	if err != nil {
 		t.Errorf("casino new node error: %v", err)
 	}
-	b, _ := node.BM.SwitchBoard(1)
+	b, _ := node.BM.SwitchBoard("1")
 	_, err = node.Play()
 	if err != nil {
 		t.Errorf("casino start node error: %v", err)
