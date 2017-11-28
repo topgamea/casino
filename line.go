@@ -2,7 +2,7 @@ package casino
 
 //LineCompute TODO
 type LineCompute interface {
-	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][]int, err error)
+	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][][]int, err error)
 }
 
 //DefaultLineCompute Default Line Computer
@@ -17,14 +17,16 @@ type NormalLine struct {
 }
 
 //Compute TODO
-func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
+func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 	lineSlots := make([]*Slot, b.Columns)
 	lines := make([]int, 0)
 	lineItems := make([][]int, 0)
-	lineItemsIndex := make([][]int, 0)
+	// lineItemsIndex := make([][]int, 0)
+	lineItemsPos := make([][][]int, 0)
 	reward := 0
 	for lineIndex, lineConfig := range config.LinesConfig {
-		itemsIndex := make([]int, 0)
+		// itemsIndex := make([]int, 0)
+		itemsPos := make([][]int, 0)
 		items := make([]int, 0)
 		column := 1
 		for _, row := range lineConfig.Line {
@@ -41,8 +43,12 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 		totalCount := 0
 		for _, s := range lineSlots {
 			if s.GetSymbol() == firstSymbol || WildReplace(config.WildConfig.IDs, config.WildConfig.Except, s.GetSymbol(), firstSymbol) {
-				itemsIndex = append(itemsIndex, totalCount)
-				items = append(items, firstSymbol)
+				// itemsIndex = append(itemsIndex, totalCount)
+				// items = append(items, firstSymbol)
+				pos := []int{0, 0}
+				pos[0] = s.X
+				pos[1] = s.Y
+				itemsPos = append(itemsPos, pos)
 				totalCount++
 			} else {
 				break
@@ -52,9 +58,10 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][]int, error) {
 		if obtainConfig.Reward[totalCount-1] != 0 {
 			reward += obtainConfig.Reward[totalCount-1]
 			lines = append(lines, lineIndex)
-			lineItemsIndex = append(lineItemsIndex, itemsIndex)
+			// lineItemsIndex = append(lineItemsIndex, itemsPos)
+			lineItemsPos = append(lineItemsPos, itemsPos)
 			lineItems = append(lineItems, items)
 		}
 	}
-	return reward, lines, lineItemsIndex, nil
+	return reward, lines, lineItemsPos, nil
 }

@@ -2,6 +2,8 @@ package casino
 
 //Slot TODO
 type Slot struct {
+	X      int
+	Y      int
 	Runner *Runner
 	Which  int
 }

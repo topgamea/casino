@@ -24,13 +24,13 @@ func TestCasino(t *testing.T) {
 	for _, slot := range b.Slots {
 		assert.Contains(t, []int{1, 2, 3}, slot.GetSymbol())
 	}
-	reward, lines, linesItems, err := node.LC.Compute(b)
+	reward, lines, linesItemsPos, err := node.LC.Compute(b)
 	if err != nil {
 		t.Errorf("casino compute line error: %v", err)
 	}
 	assert.Equal(t, 300, reward, "reward not matched")
 	assert.Equal(t, []int{0, 1, 2}, lines, "reward lines not matched")
-	assert.Equal(t, [][]int{[]int{0}, []int{0}, []int{0}}, linesItems, "reward lines items not matched")
+	assert.Equal(t, [][][]int{[][]int{[]int{0, 0}}, [][]int{[]int{1, 0}}, [][]int{[]int{2, 0}}}, linesItemsPos, "reward lines items not matched")
 	//test frontend gears
 	frontendGears := DefaultFrontendGears
 	aa, bb := frontendGears.GetGearWithItems(b)

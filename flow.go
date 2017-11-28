@@ -36,14 +36,14 @@ func play(c *Context) error {
 		return err
 	}
 	//Compute line reward
-	reward, lines, linesItemsIndex, err := n.LC.Compute(b)
+	reward, lines, linesItemsPos, err := n.LC.Compute(b)
 	if err != nil {
 		return err
 	}
 	c.AddPair("board", b)
 	c.AddPair("reward", reward)
 	c.AddPair("lines", lines)
-	c.AddPair("linesItemsIndex", linesItemsIndex)
+	c.AddPair("linesItemsPos", linesItemsPos)
 	return nil
 }
 
