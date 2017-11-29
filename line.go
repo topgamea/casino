@@ -59,7 +59,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 		}
 		obtainConfig := config.ObtainsConfig[firstSymbol]
 		if obtainConfig.Reward[totalCount-2] != 0 {
-			reward += obtainConfig.Reward[totalCount-1]
+			reward += obtainConfig.Reward[totalCount-2]
 			lines = append(lines, lineIndex)
 			// lineItemsIndex = append(lineItemsIndex, itemsPos)
 			lineItemsPos = append(lineItemsPos, itemsPos)
