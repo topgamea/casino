@@ -5,7 +5,8 @@ import (
 	"time"
 )
 
-func checkBoard(c *Context) error {
+//CheckBoard TODO
+func CheckBoard(c *Context) error {
 	_, err := c.GetValue("boardID")
 	if err != ErrPairNotExist {
 		return err
@@ -17,7 +18,8 @@ func checkBoard(c *Context) error {
 	return nil
 }
 
-func play(c *Context) error {
+//Play TODO
+func Play(c *Context) error {
 	rand.Seed(time.Now().UnixNano())
 	n := c.N
 	//get board id
@@ -47,7 +49,8 @@ func play(c *Context) error {
 	return nil
 }
 
-func getGearItems(c *Context) error {
+//GetGearItems TODO
+func GetGearItems(c *Context) error {
 	//test frontend gears
 	frontendGears := c.N.FG
 	b, err := c.GetValue("board")

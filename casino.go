@@ -69,9 +69,9 @@ type Node struct {
 
 //RegisterDefaultHooks TODO
 func (n *Node) RegisterDefaultHooks() {
-	n.RegisterHook(checkBoard)
-	n.RegisterHook(play)
-	n.RegisterHook(getGearItems)
+	n.RegisterHook(CheckBoard)
+	n.RegisterHook(Play)
+	n.RegisterHook(GetGearItems)
 }
 
 //RegisterHook TODO
