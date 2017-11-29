@@ -37,12 +37,22 @@ func Play(c *Context) error {
 	if err != nil {
 		return err
 	}
-	//Compute line reward
-	reward, lines, linesItemsPos, err := n.LC.Compute(b)
+	c.AddPair("board", b)
+	return nil
+}
+
+//ComputeLine TODO
+func ComputeLine(c *Context) error {
+	bInContext, err := c.GetValue("board")
 	if err != nil {
 		return err
 	}
-	c.AddPair("board", b)
+	b := bInContext.(*Board)
+	//Compute line reward
+	reward, lines, linesItemsPos, err := c.N.LC.Compute(b)
+	if err != nil {
+		return err
+	}
 	c.AddPair("reward", reward)
 	c.AddPair("lines", lines)
 	c.AddPair("linesItemsPos", linesItemsPos)
