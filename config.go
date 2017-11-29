@@ -20,6 +20,7 @@ type Config struct {
 	ScoreBase     int                     `json:"score_base,omitempty"`
 	LinesConfig   []*LineConfig           `json:"lines,omitempty"`
 	ObtainsConfig map[int]*ObtainConfig   `json:"obtains,omitempty"`
+	BonusConfig   map[int]*BonusConfig    `json:"bonus,omitempty"`
 	BoardsConfig  map[string]*BoardConfig `json:"boards,omitempty"`
 	GearsConfig   map[string]*GearConfig  `json:"gears,omitempty"`
 	WildConfig    *WildConfig             `json:"wild,omitempty"`
@@ -34,6 +35,7 @@ type FrontendConfig struct {
 	ScoreBase     int                   `json:"score_base,omitempty"`
 	LinesConfig   [][]int               `json:"lines,omitempty"`
 	ObtainsConfig map[int]*ObtainConfig `json:"obtains,omitempty"`
+	BonusConfig   map[int]*BonusConfig  `json:"bonus,omitempty"`
 	//	BoardsConfig  map[int]*BoardConfig   `json:"boards,omitempty"`
 	GearsConfig map[string]*GearConfig `json:"gears,omitempty"`
 	WildConfig  *WildConfig            `json:"wild,omitempty"`
@@ -46,6 +48,12 @@ type LineConfig struct {
 
 //ObtainConfig TODO
 type ObtainConfig struct {
+	ID     int   `json:"id"`
+	Reward []int `json:"reward,omitempty"`
+}
+
+//BonusConfig TODO
+type BonusConfig struct {
 	ID     int   `json:"id"`
 	Reward []int `json:"reward,omitempty"`
 }
@@ -81,6 +89,7 @@ type originCasinoConfig struct {
 	ScoreBase int                 `json:"score_base,omitempty"`
 	Lines     []string            `json:"lines,omitempty"`
 	Obtains   []string            `json:"obtains,omitempty"`
+	Bonus     []string            `json:"bonus,omitempty"`
 	Boards    []originBoardConfig `json:"boards,omitempty"`
 	Gears     []originGearConfig  `json:"gears,omitempty"`
 	Wild      originWildConfig    `json:"wild,omitempty"`
@@ -127,6 +136,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	config.ScoreBase = originConfig.ScoreBase
 	config.LinesConfig = make([]*LineConfig, 0)
 	config.ObtainsConfig = make(map[int]*ObtainConfig)
+	config.BonusConfig = make(map[int]*BonusConfig)
 	config.BoardsConfig = make(map[string]*BoardConfig)
 	config.GearsConfig = make(map[string]*GearConfig)
 	config.WildConfig = wildConfig
@@ -139,6 +149,7 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	frontendConfig.ScoreBase = originConfig.ScoreBase
 	frontendConfig.LinesConfig = make([][]int, 0)
 	frontendConfig.ObtainsConfig = make(map[int]*ObtainConfig)
+	frontendConfig.BonusConfig = make(map[int]*BonusConfig)
 	//frontendConfig.BoardsConfig = make(map[string]*BoardConfig)
 	frontendConfig.GearsConfig = make(map[string]*GearConfig)
 	frontendConfig.WildConfig = wildConfig
@@ -176,6 +187,26 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 		}
 		config.ObtainsConfig[id] = oc
 		frontendConfig.ObtainsConfig[id] = oc
+	}
+	//add bonus config
+	for _, bonus := range originConfig.Bonus {
+		oc := new(BonusConfig)
+		oc.Reward = make([]int, 0)
+		idAndReward := strings.Split(bonus, ":")
+		id, err := strconv.Atoi(idAndReward[0])
+		if err != nil {
+			return nil, nil, err
+		}
+		oc.ID = id
+		for _, reward := range strings.Split(idAndReward[1], ",") {
+			i, err := strconv.Atoi(reward)
+			if err != nil {
+				return nil, nil, err
+			}
+			oc.Reward = append(oc.Reward, i)
+		}
+		config.BonusConfig[id] = oc
+		frontendConfig.BonusConfig[id] = oc
 	}
 	//add boards config
 	for _, board := range originConfig.Boards {

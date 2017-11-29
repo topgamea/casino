@@ -28,6 +28,9 @@ func TestConfig(t *testing.T) {
 	assert.Equal(t, []int{100, 500, 1000, 2000, 5000}, c.ObtainsConfig[1].Reward, "obtain config one obtain not matched")
 	assert.Equal(t, []int{200, 500, 1000, 2000, 5000}, c.ObtainsConfig[2].Reward, "obtain config one obtain not matched")
 	assert.Equal(t, []int{300, 500, 1000, 2000, 5000}, c.ObtainsConfig[3].Reward, "obtain config one obtain not matched")
+	//check bonus config
+	assert.Equal(t, []int{0, 2, 5, 25, 50}, c.BonusConfig[22].Reward, "obtain config one obtain not matched")
+	assert.Equal(t, []int{0, 2, 5, 25, 50}, c.BonusConfig[23].Reward, "obtain config one obtain not matched")
 	//check boards config
 	assert.Equal(t, []string{"6", "7", "8", "6", "7", "8", "6", "7", "8"}, c.BoardsConfig["1"].Slots, "boards config one board slots not matched")
 	assert.Equal(t, []string{"6", "7", "8", "6", "7", "8", "6", "7", "8"}, c.BoardsConfig["2"].Slots, "boards config one board slots not matched")
