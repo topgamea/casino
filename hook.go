@@ -19,6 +19,9 @@ func (hc *HookChain) execute(c *Context) error {
 		if err != nil {
 			return err
 		}
+		if c.GotoHC != "" {
+			break
+		}
 	}
 	return nil
 }
