@@ -14,6 +14,9 @@ func (hc *HookChain) addHook(hookF HookFunc) error {
 }
 
 func (hc *HookChain) execute(c *Context) error {
+	if c.GotoHC != "" {
+		c.GotoHC = ""
+	}
 	for _, hookFunc := range hc.Hooks {
 		err := hookFunc(c)
 		if err != nil {
