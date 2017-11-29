@@ -1,6 +1,7 @@
 package casino
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 )
@@ -51,39 +52,50 @@ func (c *Casino) NewNode(lc LineCompute, nf FrontendGears) (*Node, error) {
 	n.BM = bm
 	n.LC = lc
 	n.FG = nf
-	n.HC = new(HookChain)
 	n.C = &Context{N: n, KV: make(map[string]interface{})}
 	return n, nil
 }
 
 //Node :New a Node for every player or room to Play casino
 type Node struct {
-	Type NodeType
-	C    *Context
-	HC   *HookChain
-	RM   *RunnerManage
-	BM   *BoardManage
-	LC   LineCompute
-	FG   FrontendGears
+	Type   NodeType
+	C      *Context
+	HCList map[string]*HookChain
+	RM     *RunnerManage
+	BM     *BoardManage
+	LC     LineCompute
+	FG     FrontendGears
 }
 
 //RegisterDefaultHooks TODO
 func (n *Node) RegisterDefaultHooks() {
-	n.RegisterHook(CheckBoard)
-	n.RegisterHook(Play)
-	n.RegisterHook(GetGearItems)
+	n.RegisterHook("default", CheckBoard)
+	n.RegisterHook("default", Play)
+	n.RegisterHook("default", GetGearItems)
 }
 
 //RegisterHook TODO
-func (n *Node) RegisterHook(hf HookFunc) {
-	n.HC.addHook(hf)
+func (n *Node) RegisterHook(hcID string, hf HookFunc) {
+	if _, ok := n.HCList[hcID]; !ok {
+		n.HCList[hcID] = new(HookChain)
+	}
+	n.HCList[hcID].addHook(hf)
 }
 
 //Execute TODO
-func (n *Node) Execute() error {
-	err := n.HC.execute(n.C)
-	if err != nil {
-		return err
+func (n *Node) Execute(id string) error {
+	for {
+		if _, ok := n.HCList[id]; !ok {
+			return errors.New("hook chain not exist")
+		}
+		err := n.HCList[id].execute(n.C)
+		if err != nil {
+			return err
+		}
+		if n.C.GotoHC == "" {
+			break
+		}
+		id = n.C.GotoHC
 	}
 	return nil
 }
