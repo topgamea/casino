@@ -157,16 +157,19 @@ func ParseCasinoConfig(file string) (*Config, *FrontendConfig, error) {
 	//add lines config
 	for _, line := range originConfig.Lines {
 		lc := new(LineConfig)
+		lc1 := new(LineConfig)
 		lc.Line = make([]int, 0)
+		lc1.Line = make([]int, 0)
 		for _, s := range strings.Split(line, ",") {
 			i, err := strconv.Atoi(s)
 			if err != nil {
 				return nil, nil, err
 			}
 			lc.Line = append(lc.Line, i+1)
+			lc1.Line = append(lc1.Line, i)
 		}
 		config.LinesConfig = append(config.LinesConfig, lc)
-		frontendConfig.LinesConfig = append(frontendConfig.LinesConfig, lc.Line)
+		frontendConfig.LinesConfig = append(frontendConfig.LinesConfig, lc1.Line)
 	}
 	//add obtains config
 	for _, obtain := range originConfig.Obtains {
