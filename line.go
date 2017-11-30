@@ -55,7 +55,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 			}
 		}
 		if totalCount == 1 {
-			return reward, lines, lineItemsPos, nil
+			continue
 		}
 		obtainConfig := config.ObtainsConfig[firstSymbol]
 		if obtainConfig.Reward[totalCount-2] != 0 {
