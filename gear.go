@@ -29,7 +29,7 @@ func (nfg *NormalFrontendGears) GetGearWithItems(b *Board) ([][]int, []int) {
 		if _, ok := gears[gearID]; ok {
 			continue
 		}
-		startPos := s.Runner.NowPos - 2*config.ExtraNum
+		startPos := s.Runner.NowPos - 1*config.ExtraNum
 		if startPos < 0 {
 			startPos = len(config.GearsConfig[gearID].Symbols) + startPos
 		}
