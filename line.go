@@ -46,8 +46,8 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 				// itemsIndex = append(itemsIndex, totalCount)
 				// items = append(items, firstSymbol)
 				pos := []int{0, 0}
-				pos[0] = s.X
-				pos[1] = s.Y
+				pos[0] = s.Y
+				pos[1] = s.X
 				itemsPos = append(itemsPos, pos)
 				totalCount++
 			} else {
