@@ -54,12 +54,15 @@ func (c *Casino) NewNode(lc LineCompute, nf FrontendGears) (*Node, error) {
 	n.FG = nf
 	n.HCList = make(map[string]*HookChain)
 	n.C = &Context{N: n, KV: make(map[string]interface{})}
+
+	lc.SetNode(n)
 	return n, nil
 }
 
 //Node :New a Node for every player or room to Play casino
 type Node struct {
 	Type   NodeType
+	Debug  bool
 	C      *Context
 	HCList map[string]*HookChain
 	RM     *RunnerManage

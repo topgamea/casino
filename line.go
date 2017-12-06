@@ -3,6 +3,7 @@ package casino
 //LineCompute TODO
 type LineCompute interface {
 	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][][]int, err error)
+	SetNode(n *Node) error
 }
 
 //DefaultLineCompute Default Line Computer
@@ -14,10 +15,19 @@ func init() {
 
 //NormalLine TODO
 type NormalLine struct {
+	Node *Node
+}
+
+//SetNode TODO
+func (l *NormalLine) SetNode(n *Node) error {
+	l.Node = n
+	return nil
 }
 
 //Compute TODO
 func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
+	context := l.Node.C
+
 	lineSlots := make([]*Slot, b.Columns)
 	lines := make([]int, 0)
 	lineItems := make([][]int, 0)
@@ -64,6 +74,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 			// lineItemsIndex = append(lineItemsIndex, itemsPos)
 			lineItemsPos = append(lineItemsPos, itemsPos)
 			lineItems = append(lineItems, items)
+			context.AddBILineReward(firstSymbol, totalCount, obtainConfig.Reward[totalCount-2])
 		}
 	}
 	return reward, lines, lineItemsPos, nil
