@@ -45,18 +45,26 @@ func (c *Context) AddBILineReward(id int, count int, reward int) error {
 	if !c.N.Debug {
 		return nil
 	}
+	biLineRewardsInContext, err := c.GetValue("biLineRewards")
+	if err != nil {
+		if err == ErrPairNotExist {
+			biLineRewardsInContext = make([]BILineReward, 0)
+		} else {
+			return err
+		}
+	}
+	biLineRewards := biLineRewardsInContext.([]BILineReward)
+
 	lineReward := new(BILineReward)
 	lineReward.ID = id
 	lineReward.Count = count
 	lineReward.Reward = reward
-	var biLineRewards []BILineReward
-	if _, ok := c.BI["biLineRewards"]; !ok {
-		biLineRewards = make([]BILineReward, 0)
-	} else {
-		biLineRewards = c.BI["biLineRewards"].([]BILineReward)
-	}
 	biLineRewards = append(biLineRewards, *lineReward)
-	c.BI["biLineRewards"] = biLineRewards
+
+	err = c.AddPair("biLineRewards", biLineRewards)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
