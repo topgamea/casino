@@ -83,9 +83,9 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 		}
 	}
 	//debug for bi
-	err := l.Node.C.AddPair("biLineRewards", biLineRewards)
-	if err != nil {
-		return 0, nil, nil, err
-	}
+	// err := l.Node.C.AddPair("biLineRewards", biLineRewards)
+	// if err != nil {
+	// 	return 0, nil, nil, err
+	// }
 	return reward, lines, lineItemsPos, nil
 }
