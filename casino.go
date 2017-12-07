@@ -53,7 +53,7 @@ func (c *Casino) NewNode(lc LineCompute, nf FrontendGears) (*Node, error) {
 	n.LC = lc
 	n.FG = nf
 	n.HCList = make(map[string]*HookChain)
-	n.C = &Context{N: n, KV: make(map[string]interface{})}
+	n.C = &Context{N: n, KV: make(map[string]interface{}), BI: make(map[string]interface{})}
 
 	lc.SetNode(n)
 	return n, nil
