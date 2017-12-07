@@ -49,13 +49,14 @@ func ComputeLine(c *Context) error {
 	}
 	b := bInContext.(*Board)
 	//Compute line reward
-	reward, lines, linesItemsPos, err := c.N.LC.Compute(b)
+	reward, lines, linesItemsPos, biLineRewards, err := c.N.LC.Compute(b)
 	if err != nil {
 		return err
 	}
 	c.AddPair("reward", reward)
 	c.AddPair("lines", lines)
 	c.AddPair("linesItemsPos", linesItemsPos)
+	c.AddPair("biLineRewards", biLineRewards)
 	return nil
 }
 

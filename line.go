@@ -2,7 +2,7 @@ package casino
 
 //LineCompute TODO
 type LineCompute interface {
-	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][][]int, err error)
+	Compute(b *Board) (reward int, lines []int, linesItemsIndex [][][]int, biLineRewards []BILineReward, err error)
 	SetNode(n *Node) error
 }
 
@@ -25,7 +25,7 @@ func (l *NormalLine) SetNode(n *Node) error {
 }
 
 //Compute TODO
-func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
+func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, []BILineReward, error) {
 	biLineRewards := make([]BILineReward, 0)
 
 	lineSlots := make([]*Slot, b.Columns)
@@ -82,10 +82,5 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 			biLineRewards = append(biLineRewards, *lineReward)
 		}
 	}
-	//debug for bi
-	// err := l.Node.C.AddPair("biLineRewards", biLineRewards)
-	// if err != nil {
-	// 	return 0, nil, nil, err
-	// }
-	return reward, lines, lineItemsPos, nil
+	return reward, lines, lineItemsPos, biLineRewards, nil
 }
