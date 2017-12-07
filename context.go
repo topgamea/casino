@@ -5,7 +5,6 @@ type Context struct {
 	N      *Node
 	GotoHC string
 	KV     map[string]interface{}
-	BI     map[string]interface{}
 }
 
 //AddPair TODO
@@ -29,43 +28,6 @@ func (c *Context) GetValue(key string) (interface{}, error) {
 		return nil, ErrPairNotExist
 	}
 	return c.KV[key], nil
-}
-
-//InjectBI TODO
-func (c *Context) InjectBI(key string, value interface{}) error {
-	if !c.N.Debug {
-		return nil
-	}
-	c.BI[key] = value
-	return nil
-}
-
-//AddBILineReward TODO
-func (c *Context) AddBILineReward(id int, count int, reward int) error {
-	if !c.N.Debug {
-		return nil
-	}
-	biLineRewardsInContext, err := c.GetValue("biLineRewards")
-	if err != nil {
-		if err == ErrPairNotExist {
-			biLineRewardsInContext = make([]BILineReward, 0)
-		} else {
-			return err
-		}
-	}
-	biLineRewards := biLineRewardsInContext.([]BILineReward)
-
-	lineReward := new(BILineReward)
-	lineReward.ID = id
-	lineReward.Count = count
-	lineReward.Reward = reward
-	biLineRewards = append(biLineRewards, *lineReward)
-
-	err = c.AddPair("biLineRewards", biLineRewards)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 //BILineReward TODO
