@@ -26,8 +26,6 @@ func (l *NormalLine) SetNode(n *Node) error {
 
 //Compute TODO
 func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
-	context := l.Node.C
-
 	lineSlots := make([]*Slot, b.Columns)
 	lines := make([]int, 0)
 	lineItems := make([][]int, 0)
@@ -74,7 +72,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, error) {
 			// lineItemsIndex = append(lineItemsIndex, itemsPos)
 			lineItemsPos = append(lineItemsPos, itemsPos)
 			lineItems = append(lineItems, items)
-			context.AddBILineReward(firstSymbol, totalCount, obtainConfig.Reward[totalCount-2])
+			l.Node.C.AddBILineReward(firstSymbol, totalCount, obtainConfig.Reward[totalCount-2])
 		}
 	}
 	return reward, lines, lineItemsPos, nil
