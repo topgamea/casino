@@ -49,12 +49,14 @@ func (c *Context) AddBILineReward(id int, count int, reward int) error {
 	lineReward.ID = id
 	lineReward.Count = count
 	lineReward.Reward = reward
+	var biLineRewards []*BILineReward
 	if _, ok := c.BI["biLineRewards"]; !ok {
-		c.BI["biLineRewards"] = make([]*BILineReward, 0)
+		biLineRewards = make([]*BILineReward, 0)
+	} else {
+		biLineRewards = c.BI["biLineRewards"].([]*BILineReward)
 	}
-	biLineRewards := c.BI["biLineRewards"].([]*BILineReward)
 	biLineRewards = append(biLineRewards, lineReward)
-	c.InjectBI("biLineRewards", biLineRewards)
+	c.BI["biLineRewards"] = biLineRewards
 	return nil
 }
 
