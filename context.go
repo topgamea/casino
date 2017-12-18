@@ -1,7 +1,5 @@
 package casino
 
-import "fmt"
-
 //Context TODO
 type Context struct {
 	N      *Node
@@ -27,7 +25,6 @@ func (c *Context) RemovePair(key string, value interface{}) error {
 //GetValue TODO
 func (c *Context) GetValue(key string) (interface{}, error) {
 	if _, ok := c.KV[key]; !ok {
-		fmt.Println(key)
 		return nil, ErrPairNotExist
 	}
 	return c.KV[key], nil
