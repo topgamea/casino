@@ -32,7 +32,8 @@ func (c *Context) GetValue(key string) (interface{}, error) {
 
 //BILineReward TODO
 type BILineReward struct {
-	ID     int
-	Count  int
-	Reward int
+	ID        int
+	LineIndex int
+	Count     int
+	Reward    int
 }

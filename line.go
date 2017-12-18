@@ -70,6 +70,7 @@ func (l *NormalLine) Compute(b *Board) (int, []int, [][][]int, []BILineReward, e
 			lineReward := new(BILineReward)
 			lineReward.ID = firstSymbol
 			lineReward.Count = totalCount
+			lineReward.LineIndex = lineIndex
 			lineReward.Reward = obtainConfig.Reward[totalCount-2]
 			biLineRewards = append(biLineRewards, *lineReward)
 		}
