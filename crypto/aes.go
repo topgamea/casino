@@ -12,16 +12,21 @@ const (
 	//ivDefValue = "0102030405060708"
 )
 
-func AesEncrypt(plaintext []byte, key []byte, iv []byte) ([]byte, error) {
-	key = key[:16]
-	block, err := aes.NewCipher(key)
+func AesEncrypt(plaintext []byte, key []byte) ([]byte, error) {
+	lt := len(key)
+	if lt != 32 {
+		return nil,errors.New("token invalid")
+	}
+	key[0] = '0'
+	key[lt-1] = '1'
+	block, err := aes.NewCipher(key[0:16])
 	if err != nil {
 		return nil, errors.New("invalid decrypt key")
 	}
 	blockSize := block.BlockSize()
 	plaintext = PKCS5Padding(plaintext, blockSize)
-	//iv := []byte(ivDefValue)
-	blockMode := cipher.NewCBCEncrypter(block, iv)
+
+	blockMode := cipher.NewCBCEncrypter(block, key[16:])
 
 	ciphertext := make([]byte, len(plaintext))
 	blockMode.CryptBlocks(ciphertext, plaintext)
@@ -29,9 +34,15 @@ func AesEncrypt(plaintext []byte, key []byte, iv []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
-func AesDecrypt(ciphertext []byte, key []byte, iv []byte) ([]byte, error) {
-	key = key[:16]
-	block, err := aes.NewCipher(key)
+func AesDecrypt(ciphertext []byte, key []byte) ([]byte, error) {
+	lt := len(key)
+	if lt != 32 {
+		return nil,errors.New("token invalid")
+	}
+	key[0] = '0'
+	key[lt-1] = '1'
+
+	block, err := aes.NewCipher(key[0:16])
 	if err != nil {
 		return nil, errors.New("invalid decrypt key")
 	}
@@ -47,7 +58,7 @@ func AesDecrypt(ciphertext []byte, key []byte, iv []byte) ([]byte, error) {
 		return nil, errors.New("ciphertext is not a multiple of the block size")
 	}
 
-	blockModel := cipher.NewCBCDecrypter(block, iv)
+	blockModel := cipher.NewCBCDecrypter(block, key[16:])
 
 	plaintext := make([]byte, len(ciphertext))
 	blockModel.CryptBlocks(plaintext, ciphertext)
