@@ -57,7 +57,7 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 		return err
 	}
 	logger.Infof("=========================")
-	logger.Infof(n)
+	logger.Infof("%v",n)
 	for i := 0; i < int(n); i++ {
 		r := container[i]
 
