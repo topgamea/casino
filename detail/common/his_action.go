@@ -25,7 +25,7 @@ func InitMysqlHisModels(dsn string, syncDb bool) error {
 		return err
 	}
 
-	orm.RegisterModel(new(Game), new(Round), new(Spin), new(GenericReward))
+	//orm.RegisterModel(new(Game), new(Round), new(Spin), new(GenericReward))
 	if syncDb {
 		err = orm.RunSyncdb("his_db", false, true)
 		if err != nil {
