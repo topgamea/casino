@@ -67,10 +67,6 @@ func (u *Game) TableName() string {
 	return "t_game"
 }
 
-type Position struct {
-	Column int `json:"column"` //坐标从0开始计
-	Row    int `json:"row"`
-}
 
 type GenericReward struct {
 	Id            int  `json:"-" orm:"pk;auto"`

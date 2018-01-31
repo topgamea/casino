@@ -1,12 +1,11 @@
 package common
 
 import (
-	"time"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"go.pkg.wesai.com/p/base_lib/log"
+	"time"
 )
-
 
 var (
 	O      orm.Ormer
@@ -26,7 +25,7 @@ func InitMysqlModels(dsn string, syncDb bool) error {
 		return err
 	}
 
-	orm.RegisterModel(new(Game), new(Round), new(Spin),new(GenericReward))
+	orm.RegisterModel(new(Game), new(Round), new(Spin), new(GenericReward))
 	if syncDb {
 		err = orm.RunSyncdb("default", false, true)
 		if err != nil {
@@ -40,7 +39,7 @@ func InitMysqlModels(dsn string, syncDb bool) error {
 }
 
 func CreateGame(g *Game) error {
-	rows,err := O.InsertOrUpdate(g)
+	rows, err := O.InsertOrUpdate(g)
 	if err != nil {
 		//logger.Error(err.Error())
 		return err
@@ -52,7 +51,7 @@ func CreateGame(g *Game) error {
 	return nil
 }
 
-func InsertFreeSpin(r *Round) error  {
+func InsertFreeSpin(r *Round) error {
 	if r.Game != nil {
 		err := CreateGame(r.Game)
 		if err != nil {
@@ -61,13 +60,13 @@ func InsertFreeSpin(r *Round) error  {
 		}
 	}
 
-	_, err := O.InsertOrUpdate(r,"EndTime","TotalReward")
+	_, err := O.InsertOrUpdate(r, "EndTime", "TotalReward")
 	if err != nil {
 		logger.Error(err)
 		return err
 	}
-	for _,sp := range r.Spins {
-		err := InsertSpin(sp,r)
+	for _, sp := range r.Spins {
+		err := InsertSpin(sp, r)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -77,7 +76,6 @@ func InsertFreeSpin(r *Round) error  {
 	return nil
 
 }
-
 
 func InsertRound(r *Round) error {
 	if r.Game != nil {
@@ -88,13 +86,13 @@ func InsertRound(r *Round) error {
 		}
 	}
 
-	_ ,err := O.Insert(r)
+	_, err := O.Insert(r)
 	if err != nil {
 		logger.Error(err)
 		return err
 	}
-	for _,sp := range r.Spins {
-		err := InsertSpin(sp,r)
+	for _, sp := range r.Spins {
+		err := InsertSpin(sp, r)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -104,11 +102,11 @@ func InsertRound(r *Round) error {
 	return nil
 }
 
-func InsertSpin(s *Spin,parentRound *Round) error {
+func InsertSpin(s *Spin, parentRound *Round) error {
 	if s.Round == nil {
 		s.Round = parentRound
 	}
-	rows,err := O.Insert(s)
+	rows, err := O.Insert(s)
 	if err != nil {
 		logger.Error(err)
 		return err
@@ -117,8 +115,8 @@ func InsertSpin(s *Spin,parentRound *Round) error {
 	if rows != 1 {
 		logger.Infoln(rows)
 	}
-	for _,rw := range s.RewardDetails {
-		err := InsertGenericReward(rw,s,parentRound)
+	for _, rw := range s.RewardDetails {
+		err := InsertGenericReward(rw, s, parentRound)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -137,7 +135,7 @@ func InsertGenericReward(gr *GenericReward, parentSpin *Spin, parentRound *Round
 		gr.Spin = parentSpin
 	}
 
-	rows,err := O.Insert(gr)
+	rows, err := O.Insert(gr)
 	if err != nil {
 		logger.Error(err)
 		return err
@@ -150,7 +148,7 @@ func InsertGenericReward(gr *GenericReward, parentSpin *Spin, parentRound *Round
 	return nil
 }
 
-func GetRound(round string) (*Round,error)  {
+func GetRound(round string) (*Round, error) {
 	var err error
 	r := &Round{
 		RoundId: round,
@@ -158,22 +156,22 @@ func GetRound(round string) (*Round,error)  {
 
 	err = O.Read(r)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	_, err = O.LoadRelated(r,"Game",true)
+	_, err = O.LoadRelated(r, "Game", true)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	n, err := O.LoadRelated(r,"Spins",true)
-	logger.Infof("===== %v",n)
+	n, err := O.LoadRelated(r, "Spins", true)
+	logger.Infof("===== %v", n)
 	if err != nil {
 		logger.Infoln("=======================")
-		return nil,err
+		return nil, err
 	}
 
-	for _,sp := range r.Spins {
+	for _, sp := range r.Spins {
 		n3, err := O.LoadRelated(sp, "RewardDetails", true)
 		if err != nil {
 			logger.Infoln("=======================")
@@ -182,13 +180,11 @@ func GetRound(round string) (*Round,error)  {
 		logger.Infof("===== %v", n3)
 	}
 
-
-	return r,nil
+	return r, nil
 
 }
 
-
-func GetRoundOnly(round string) (*Round,error)  {
+func GetRoundOnly(round string) (*Round, error) {
 	var err error
 	r := &Round{
 		RoundId: round,
@@ -197,22 +193,14 @@ func GetRoundOnly(round string) (*Round,error)  {
 	err = O.Read(r)
 	if err != nil {
 		logger.Infoln("=======================")
-		return nil,err
+		return nil, err
 	}
 
-	_, err = O.LoadRelated(r,"Game",true)
+	_, err = O.LoadRelated(r, "Game", true)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	return r,nil
+	return r, nil
 
 }
-
-
-
-
-
-
-
-
