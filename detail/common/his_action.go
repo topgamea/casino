@@ -43,7 +43,7 @@ func InitMysqlHisModels(dsn string, syncDb bool) error {
 //dividingTime 之前的记录会被移动到历史库里,执行时刻，如果不设则直接移动，设置格式 上午6点就设为6 [0-23]
 func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 	tn := time.Now().Local()
-	if tn.Hour() != execHour {
+	if execHour != -1 && tn.Hour() != execHour {
 		return nil
 	}
 
@@ -55,6 +55,7 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 		return err
 	}
 
+	logger.Infof(n)
 	for i := 0; i < int(n); i++ {
 		r := container[i]
 
