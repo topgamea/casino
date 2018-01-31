@@ -55,7 +55,7 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 		return err
 	}
 
-	for i := 0; i < n; i++ {
+	for i := 0; i < int(n); i++ {
 		r := container[i]
 
 		data,err := json.Marshal(r)
