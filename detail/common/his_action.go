@@ -70,14 +70,6 @@ func GetOldData(dividingTime time.Time, O orm.Ormer) ([]*Round,error)  {
 			}
 			s.RewardDetails = gr
 		}
-
-		/*
-		data,err := json.Marshal(r)
-		if err != nil {
-			logger.Error(err)
-		}
-		logger.Infof(string(data))
-		*/
 	}
 	return container,nil
 }
@@ -123,7 +115,9 @@ func deleteRound(r *Round,O orm.Ormer) error {
 			}
 		}
 		_,err = O.Delete(sp)
-		logger.Error(err.Error())
+		if err != nil {
+			logger.Error(err.Error())
+		}
 		continue
 	}
 	_, err = O.Delete(r)
