@@ -58,11 +58,22 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 	for i := 0; i < int(n); i++ {
 		r := container[i]
 
+		spins := []*Spin{}
+		sn,err := O.QueryTable(&Spin{}).Filter("Round",r.RoundId).All(&spins)
+		if err != nil {
+			logger.Error(err.Error())
+			return err
+		}
+		logger.Infof("%v",sn)
+
+		r.Spins = spins
+
 		data,err := json.Marshal(r)
 		if err != nil {
 			logger.Error(err)
 		}
 		logger.Infof(string(data))
+
 
 	}
 	return nil
