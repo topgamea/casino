@@ -68,6 +68,15 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int) error {
 
 		r.Spins = spins
 
+		for _,s := range spins {
+			gr := []*GenericReward{}
+			_,err = O.QueryTable(&GenericReward{}).Filter("Round",r.RoundId,"Spin",s.Id).All(&gr)
+			if err != nil {
+				logger.Error(err.Error())
+				return err
+			}
+			s.RewardDetails = gr
+		}
 		data,err := json.Marshal(r)
 		if err != nil {
 			logger.Error(err)
