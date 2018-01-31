@@ -6,6 +6,7 @@ import (
 	"crypto/cipher"
 	"errors"
 	"bytes"
+	"encoding/base64"
 )
 
 const (
@@ -31,7 +32,11 @@ func AesEncrypt(plaintext []byte, key []byte) ([]byte, error) {
 	ciphertext := make([]byte, len(plaintext))
 	blockMode.CryptBlocks(ciphertext, plaintext)
 
-	return ciphertext, nil
+	dl := base64.StdEncoding.EncodedLen(len(ciphertext))
+	dst := make([]byte,dl)
+	base64.StdEncoding.Encode(dst,ciphertext)
+
+	return dst, nil
 }
 
 func AesDecrypt(ciphertext []byte, key []byte) ([]byte, error) {
@@ -41,6 +46,15 @@ func AesDecrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	}
 	key[0] = '0'
 	key[lt-1] = '1'
+
+	dl := base64.StdEncoding.DecodedLen(len(ciphertext))
+	dafter64 := make([]byte,dl)
+	n, err := base64.StdEncoding.Decode(dafter64,ciphertext)
+	if err != nil {
+		return nil, err
+	}
+	ciphertext = dafter64[0:n]
+
 
 	block, err := aes.NewCipher(key[0:16])
 	if err != nil {
