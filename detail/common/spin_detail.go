@@ -90,7 +90,7 @@ type SpinNew struct {
 }
 
 func (u *SpinNew) TableName() string {
-	return "t_game_spin_new"
+	return "t_game_spin"
 }
 
 func (u *SpinNew) TableUnique() [][]string {
