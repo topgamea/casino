@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	CurO      orm.Ormer
+	CurO   orm.Ormer
 	logger = log.DLogger()
 )
 
@@ -25,7 +25,7 @@ func InitMysqlModels(dsn string, syncDb bool) error {
 		return err
 	}
 
-	orm.RegisterModel(new(Game), new(Round), new(Spin), new(GenericReward))
+	orm.RegisterModel(new(Game), new(Round), new(SpinNew), new(GenericReward))
 	if syncDb {
 		err = orm.RunSyncdb("default", false, true)
 		if err != nil {
@@ -51,9 +51,9 @@ func CreateGame(g *Game, O orm.Ormer) error {
 	return nil
 }
 
-func InsertFreeSpin(r *Round,O orm.Ormer) error {
+func InsertFreeSpin(r *Round, O orm.Ormer) error {
 	if r.Game != nil {
-		err := CreateGame(r.Game,O)
+		err := CreateGame(r.Game, O)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -66,7 +66,7 @@ func InsertFreeSpin(r *Round,O orm.Ormer) error {
 		return err
 	}
 	for _, sp := range r.Spins {
-		err := InsertSpin(sp, r,O)
+		err := InsertSpin(sp, r, O)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -79,7 +79,7 @@ func InsertFreeSpin(r *Round,O orm.Ormer) error {
 
 func InsertRound(r *Round, O orm.Ormer) error {
 	if r.Game != nil {
-		err := CreateGame(r.Game,O)
+		err := CreateGame(r.Game, O)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -92,7 +92,7 @@ func InsertRound(r *Round, O orm.Ormer) error {
 		return err
 	}
 	for _, sp := range r.Spins {
-		err := InsertSpin(sp, r,O)
+		err := InsertSpin(sp, r, O)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -102,7 +102,7 @@ func InsertRound(r *Round, O orm.Ormer) error {
 	return nil
 }
 
-func InsertSpin(s *Spin, parentRound *Round, O orm.Ormer) error {
+func InsertSpin(s *SpinNew, parentRound *Round, O orm.Ormer) error {
 	if s.Round == nil {
 		s.Round = parentRound
 	}
@@ -116,7 +116,7 @@ func InsertSpin(s *Spin, parentRound *Round, O orm.Ormer) error {
 		logger.Infoln(rows)
 	}
 	for _, rw := range s.RewardDetails {
-		err := InsertGenericReward(rw, s, parentRound,O)
+		err := InsertGenericReward(rw, s, parentRound, O)
 		if err != nil {
 			logger.Error(err)
 			return err
@@ -126,7 +126,7 @@ func InsertSpin(s *Spin, parentRound *Round, O orm.Ormer) error {
 	return nil
 }
 
-func InsertGenericReward(gr *GenericReward, parentSpin *Spin, parentRound *Round, O orm.Ormer) error {
+func InsertGenericReward(gr *GenericReward, parentSpin *SpinNew, parentRound *Round, O orm.Ormer) error {
 	if gr.Round == nil {
 		gr.Round = parentRound
 	}

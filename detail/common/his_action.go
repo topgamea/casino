@@ -1,6 +1,5 @@
 package common
 
-
 import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -8,9 +7,8 @@ import (
 )
 
 var (
-	HistO     orm.Ormer
+	HistO orm.Ormer
 )
-
 
 func InitMysqlHisModels(dsn string, syncDb bool) error {
 	orm.DefaultTimeLoc = time.Local
@@ -38,62 +36,60 @@ func InitMysqlHisModels(dsn string, syncDb bool) error {
 	return err
 }
 
-
 //dividingTime 之前的记录会被移动到历史库里,执行时刻，如果不设则直接移动，设置格式 上午6点就设为6 [0-23]
-func GetOldData(dividingTime time.Time, O orm.Ormer) ([]*Round,error)  {
+func GetOldData(dividingTime time.Time, O orm.Ormer) ([]*Round, error) {
 	container := []*Round{}
-	n,err := O.QueryTable(&Round{}).Filter("CreatedAt__lt",dividingTime).RelatedSel().All(&container)
+	n, err := O.QueryTable(&Round{}).Filter("CreatedAt__lt", dividingTime).RelatedSel().All(&container)
 
 	if err != nil {
 		logger.Error(err.Error())
-		return nil,err
+		return nil, err
 	}
 	for i := 0; i < int(n); i++ {
 		r := container[i]
 
-
-		spins := []*Spin{}
-		_,err := O.QueryTable(&Spin{}).Filter("Round",r.RoundId).All(&spins)
+		spins := []*SpinNew{}
+		_, err := O.QueryTable(&SpinNew{}).Filter("Round", r.RoundId).All(&spins)
 		if err != nil {
 			logger.Error(err.Error())
-			return nil,err
+			return nil, err
 		}
 
 		r.Spins = spins
 
-		for _,s := range spins {
+		for _, s := range spins {
 			gr := []*GenericReward{}
-			_,err = O.QueryTable(&GenericReward{}).Filter("Spin",s.Id).All(&gr)
+			_, err = O.QueryTable(&GenericReward{}).Filter("Spin", s.Id).All(&gr)
 			if err != nil {
 				logger.Error(err.Error())
-				return nil,err
+				return nil, err
 			}
 			s.RewardDetails = gr
 		}
 	}
-	return container,nil
+	return container, nil
 }
 
 //dividingTime 之前的记录会被移动到历史库里,执行时刻，如果不设则直接移动，设置格式 上午6点就设为6 [0-23]
 // Oc 当前库 Oh 历史库
-func MoveOldDataToHis(dividingTime time.Time,execHour int, Oc,Oh orm.Ormer) error {
+func MoveOldDataToHis(dividingTime time.Time, execHour int, Oc, Oh orm.Ormer) error {
 	tn := time.Now().Local()
 	if execHour != -1 && tn.Hour() != execHour {
 		return nil
 	}
 
-	rs,err := GetOldData(dividingTime,Oc)
+	rs, err := GetOldData(dividingTime, Oc)
 	if err != nil {
 		return err
 	}
 
-	for _,r := range rs {
-		err = InsertRound(r,Oh)
+	for _, r := range rs {
+		err = InsertRound(r, Oh)
 		if err != nil {
 			logger.Error(err)
 			continue
 		}
-		err = deleteRound(r,Oc)
+		err = deleteRound(r, Oc)
 		if err != nil {
 			logger.Error(err)
 			continue
@@ -104,17 +100,17 @@ func MoveOldDataToHis(dividingTime time.Time,execHour int, Oc,Oh orm.Ormer) erro
 
 }
 
-func deleteRound(r *Round,O orm.Ormer) error {
+func deleteRound(r *Round, O orm.Ormer) error {
 	var err error
-	for _,sp := range r.Spins {
-		for _,gr := range sp.RewardDetails {
-			_,err = O.Delete(gr)
+	for _, sp := range r.Spins {
+		for _, gr := range sp.RewardDetails {
+			_, err = O.Delete(gr)
 			if err != nil {
 				logger.Error(err.Error())
 				continue
 			}
 		}
-		_,err = O.Delete(sp)
+		_, err = O.Delete(sp)
 		if err != nil {
 			logger.Error(err.Error())
 		}
@@ -126,4 +122,3 @@ func deleteRound(r *Round,O orm.Ormer) error {
 	}
 	return err
 }
-
