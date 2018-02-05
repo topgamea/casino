@@ -101,7 +101,7 @@ func (u *SpinNew) TableUnique() [][]string {
 
 type GenericReward struct {
 	Id            int      `json:"-" orm:"pk;auto"`
-	Round         *Round   `json:"-" orm:"rel(fk)"`
+	//Round         *Round   `json:"-" orm:"rel(fk)"`
 	Spin          *SpinNew `json:"-" orm:"rel(fk)"`
 	LineId        int      `json:"line_id"`                          //中奖线id  如果是bonus 或者 scatter中奖，就把该值设为 bonus 和 scatter图标
 	RewardType    int      `json:"reward_type"`                      // 0 item中奖 1 scatter  2 bonus 3 jackpot
@@ -122,6 +122,6 @@ func (u *GenericReward) TableName() string {
 
 func (u *GenericReward) TableUnique() [][]string {
 	return [][]string{
-		[]string{"Round", "Spin", "LineId", "RewardType"},
+		[]string{"Spin", "LineId", "RewardType"},
 	}
 }

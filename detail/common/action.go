@@ -127,10 +127,11 @@ func InsertSpin(s *SpinNew, parentRound *Round, O orm.Ormer) error {
 }
 
 func InsertGenericReward(gr *GenericReward, parentSpin *SpinNew, parentRound *Round, O orm.Ormer) error {
+	/*
 	if gr.Round == nil {
 		gr.Round = parentRound
 	}
-
+	*/
 	if gr.Spin == nil {
 		gr.Spin = parentSpin
 	}
