@@ -71,7 +71,7 @@ func (u *Spin) TableUnique() [][]string {
 */
 
 type SpinNew struct {
-	Id         int    `json:"-" orm:"pk;auto"`
+	Id         int64  `json:"-" orm:"pk;auto"`
 	Round      *Round `json:"-" orm:"rel(fk)"`
 	FreeGameId int    `json:"free_game_id"` // 主游戏填0 freespin填具体值第几次freespin
 	RespinId   int    `json:"respin_id"`    //非resipin情况下填0， respin情况下填具体第几次respin，从1开始计
@@ -100,7 +100,7 @@ func (u *SpinNew) TableUnique() [][]string {
 }
 
 type GenericReward struct {
-	Id            int      `json:"-" orm:"pk;auto"`
+	Id int64 `json:"-" orm:"pk;auto"`
 	//Round         *Round   `json:"-" orm:"rel(fk)"`
 	Spin          *SpinNew `json:"-" orm:"rel(fk)"`
 	LineId        int      `json:"line_id"`                          //中奖线id  如果是bonus 或者 scatter中奖，就把该值设为 bonus 和 scatter图标
