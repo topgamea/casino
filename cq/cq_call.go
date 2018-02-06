@@ -1,19 +1,14 @@
 package cq
 
 import (
-	"io/ioutil"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
-	"fmt"
-	"encoding/json"
-
-	//"../config/server_config"
-	"github.com/HelloWorldDev/casino/config/server_config"
 )
-
-
 
 //RandomTokenResponse TODO
 type RandomTokenResponse struct {
@@ -79,13 +74,29 @@ type CQStatus struct {
 
 //CQService TODO
 type CQService struct {
-	Config *server_config.CqGameConfig
+	//Config *server_config.CqGameConfig
+
+	Url  string
+	Auth string
+	Code string
+}
+
+func NewCqService(url, auth, code string) *CQService {
+	return &CQService{
+		Url:  url,
+		Auth: auth,
+		Code: code,
+	}
 }
 
 //CreateRandomToken TODO
 func (s *CQService) CreateRandomToken() (string, error) {
-	url := (s.Config.URL) + "dev/peace/gametoken?account=random"
-	auth := s.Config.Auth
+	//url := (s.Config.URL) + "dev/peace/gametoken?account=random"
+	//auth := s.Config.Auth
+
+	url := s.Url + "dev/peace/gametoken?account=random"
+	auth := s.Auth
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return "", err
@@ -116,8 +127,12 @@ func (s *CQService) CreateRandomToken() (string, error) {
 
 //AuthUser TODO
 func (s *CQService) AuthUser(token string) (*AuthUserResponse, error) {
-	url := s.Config.URL + "gamepool/cq9/player/auth"
-	auth := s.Config.Auth
+	//url := s.Config.URL + "gamepool/cq9/player/auth"
+	//auth := s.Config.Auth
+
+	url := s.Url + "gamepool/cq9/player/auth"
+	auth := s.Auth
+
 	//create post params
 	params := "gametoken=" + token
 	req, err := http.NewRequest("POST", url, strings.NewReader(params))
@@ -150,9 +165,13 @@ func (s *CQService) AuthUser(token string) (*AuthUserResponse, error) {
 
 //Bet TODO
 func (s *CQService) Bet(uid string, gameToken string, round string, amount float64, mtcode string) (*CQBetResponse, error) {
-	url := s.Config.URL + "gamepool/cq9/game/bet"
-	auth := s.Config.Auth
-	gameCode := s.Config.Code
+	//url := s.Config.URL + "gamepool/cq9/game/bet"
+	//auth := s.Config.Auth
+	//gameCode := s.Config.Code
+
+	url := s.Url + "gamepool/cq9/game/bet"
+	auth := s.Auth
+	gameCode := s.Code
 
 	loc := time.FixedZone("AST", -4*3600)
 	RFC3339 := "2006-01-02T15:04:05"
@@ -196,9 +215,14 @@ func (s *CQService) Bet(uid string, gameToken string, round string, amount float
 
 //BetWin TODO
 func (s *CQService) BetWin(uid string, gameToken string, round string, amount float64, mtcode string) (*CQBetResponse, error) {
-	url := s.Config.URL + "gamepool/cq9/game/win"
-	auth := s.Config.Auth
-	gameCode := s.Config.Code
+	//url := s.Config.URL + "gamepool/cq9/game/win"
+	//auth := s.Config.Auth
+	//gameCode := s.Config.Code
+
+	url := s.Url + "gamepool/cq9/game/win"
+	auth := s.Auth
+	gameCode := s.Code
+
 
 	loc := time.FixedZone("AST", -4*3600)
 	RFC3339 := "2006-01-02T15:04:05"
@@ -242,9 +266,13 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 
 //BetEnd TODO
 func (s *CQService) BetEnd(uid string, gameToken string, round string, amount float64, mtcode string) (*CQBetResponse, error) {
-	url := s.Config.URL + "gamepool/cq9/game/end"
-	auth := s.Config.Auth
-	gameCode := s.Config.Code
+	//url := s.Config.URL + "gamepool/cq9/game/end"
+	//auth := s.Config.Auth
+	//gameCode := s.Config.Code
+
+	url := s.Url + "gamepool/cq9/game/end"
+	auth := s.Auth
+	gameCode := s.Code
 
 	loc := time.FixedZone("AST", -4*3600)
 	RFC3339 := "2006-01-02T15:04:05"
@@ -288,8 +316,13 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 
 //Balance TODO
 func (s *CQService) Balance(uid string) (float64, error) {
-	url := (s.Config.URL) + "gamepool/cq9/player/balance/" + uid
-	auth := s.Config.Auth
+	//url := (s.Config.URL) + "gamepool/cq9/player/balance/" + uid
+	//auth := s.Config.Auth
+
+
+	url := s.Url + "gamepool/cq9/player/balance/" + uid
+	auth := s.Auth
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return 0, err
