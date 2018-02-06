@@ -9,7 +9,8 @@ import (
 	"fmt"
 	"encoding/json"
 
-	"../config/server_config"
+	//"../config/server_config"
+	"github.com/HelloWorldDev/casino/config/server_config"
 )
 
 
