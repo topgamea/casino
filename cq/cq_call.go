@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"encoding/json"
 
-	"casino/config/server_config"
+	"../config/server_config"
 )
 
 
