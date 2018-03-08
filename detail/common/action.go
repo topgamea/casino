@@ -51,6 +51,18 @@ func CreateGame(g *Game, O orm.Ormer) error {
 	return nil
 }
 
+func InsertMultiRound(rs []*Round, O orm.Ormer) (int64,error)  {
+	return O.InsertMulti(len(rs), rs)
+}
+
+func InsertMultiSpin(spins []*SpinNew, O orm.Ormer)  (int64,error) {
+	return O.InsertMulti(len(spins), spins)
+}
+
+func InsertMultiReward(rewards []*GenericReward, O orm.Ormer)  (int64,error) {
+	return O.InsertMulti(len(rewards), rewards)
+}
+
 func InsertFreeSpin(r *Round, O orm.Ormer) error {
 	if r.Game != nil {
 		err := CreateGame(r.Game, O)
