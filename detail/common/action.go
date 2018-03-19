@@ -25,7 +25,7 @@ func InitMysqlModels(dsn string, syncDb bool) error {
 		return err
 	}
 
-	orm.RegisterModel(new(Game), new(Round), new(SpinNew), new(GenericReward))
+	orm.RegisterModel(new(Game), new(Round), new(SpinNew), new(GenericReward), new(GameStat))
 	if syncDb {
 		err = orm.RunSyncdb("default", false, true)
 		if err != nil {
@@ -85,8 +85,48 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 		}
 	}
 
+	if r.GameStat != nil {
+		r.GameStat.Round = r
+		err := UpdateStat(r.GameStat,O)
+		if err != nil {
+			logger.Error(err)
+			return err
+		}
+	}
+
 	return nil
 
+}
+
+
+func UpdateStat(gs *GameStat, O orm.Ormer) error  {
+	tp := &GameStat{
+		Round:gs.Round,
+	}
+	_,_,err := O.ReadOrCreate(tp,"Round")
+	if err != nil {
+		return err
+	}
+
+	if tp.HitJackpot || gs.HitJackpot {
+		gs.HitJackpot = true
+	}
+
+	if tp.HitFreespin || gs.HitFreespin {
+		gs.HitFreespin = true
+	}
+
+	if tp.HitRespin || gs.HitRespin {
+		gs.HitRespin = true
+	}
+
+	if tp.HitBonus || gs.HitBonus {
+		gs.HitBonus = true
+	}
+
+	_,err = O.Update(gs,"HitJackpot","HitFreespin","HitRespin", "HitBonus")
+
+	return err
 }
 
 func InsertRound(r *Round, O orm.Ormer) error {
@@ -111,6 +151,15 @@ func InsertRound(r *Round, O orm.Ormer) error {
 		}
 	}
 
+	if r.GameStat != nil {
+		r.GameStat.Round = r
+		err := UpdateStat(r.GameStat,O)
+		if err != nil {
+			logger.Error(err)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -118,15 +167,13 @@ func InsertSpin(s *SpinNew, parentRound *Round, O orm.Ormer) error {
 	if s.Round == nil {
 		s.Round = parentRound
 	}
-	rows, err := O.Insert(s)
+	_, err := O.Insert(s)
 	if err != nil {
 		logger.Error(err)
 		return err
 	}
 
-	if rows != 1 {
-		logger.Infoln(rows)
-	}
+	//logger.Infof("------ spin_id:%v, structId:%v",spin_id, s.Id)
 	for _, rw := range s.RewardDetails {
 		err := InsertGenericReward(rw, s, parentRound, O)
 		if err != nil {
@@ -177,20 +224,21 @@ func GetRound(round string, O orm.Ormer) (*Round, error) {
 		return nil, err
 	}
 
-	n, err := O.LoadRelated(r, "Spins", true)
-	logger.Infof("===== %v", n)
+	_, err = O.LoadRelated(r, "Spins", true)
 	if err != nil {
-		logger.Infoln("=======================")
 		return nil, err
 	}
 
 	for _, sp := range r.Spins {
-		n3, err := O.LoadRelated(sp, "RewardDetails", true)
+		_, err := O.LoadRelated(sp, "RewardDetails", true)
 		if err != nil {
-			logger.Infoln("=======================")
 			return nil, err
 		}
-		logger.Infof("===== %v", n3)
+	}
+
+	_,err = O.LoadRelated(r,"GameStat")
+	if err != nil {
+		return nil, err
 	}
 
 	return r, nil
