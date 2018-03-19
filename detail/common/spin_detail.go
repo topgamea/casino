@@ -115,10 +115,9 @@ func (u *GameStat) TableName() string {
 	return "t_game_stat_reward"
 }
 
-/*
+
 func (u *GameStat) TableUnique() [][]string {
 	return [][]string{
 		[]string{"Round"},
 	}
 }
-*/
