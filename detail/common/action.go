@@ -103,11 +103,10 @@ func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 	tp := &GameStat{
 		Round:gs.Round,
 	}
-	_,_,err := O.ReadOrCreate(tp,"Round")
+	_,id,err := O.ReadOrCreate(tp,"Round")
 	if err != nil {
 		return err
 	}
-
 	if tp.HitJackpot || gs.HitJackpot {
 		gs.HitJackpot = true
 	}
@@ -123,6 +122,8 @@ func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 	if tp.HitBonus || gs.HitBonus {
 		gs.HitBonus = true
 	}
+
+	gs.Id = uint64(id)
 
 	_,err = O.Update(gs,"HitJackpot","HitFreespin","HitRespin", "HitBonus")
 
