@@ -44,7 +44,7 @@ func (u *Round) TableName() string {
 type SpinNew struct {
 	Id         uint64 `json:"-" orm:"pk;auto"`
 	Round      *Round `json:"-" orm:"rel(fk)"`
-	FreeGameId uint8  `json:"free_game_id"` // 主游戏填0 freespin填具体值第几次freespin
+	FreeGameId uint  `json:"free_game_id"` // 主游戏填0 freespin填具体值第几次freespin
 	RespinId   uint8  `json:"respin_id"`    //非resipin情况下填0， respin情况下填具体第几次respin，从1开始计
 	SpinType   uint8  `json:"spin_type"`    //子游戏类型  0 主游戏， 1 freespin ，2 主游戏中的respin 3 freespin中现的espin
 
