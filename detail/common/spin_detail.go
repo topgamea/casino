@@ -75,7 +75,7 @@ type GenericReward struct {
 	//Round         *Round   `json:"-" orm:"rel(fk)"`
 	Spin          *SpinNew `json:"-" orm:"rel(fk)"`
 	LineId        uint     `json:"line_id"`                          //中奖线id  如果是bonus 或者 scatter中奖，就把该值设为 bonus 和 scatter图标
-	RewardType    uint8    `json:"reward_type"`                      // 0 item中奖 1 scatter  2 bonus 3 jackpot
+	RewardType    uint8    `json:"reward_type"`                      // 0 item中奖 1 freespin  2 bonus 3 jackpot
 	RewardItems   string   `json:"reward_items"`                     //json数组 [int] 中奖图标 对于美人鱼，只有一个图标；红唇会有多个图标
 	//BetMultiple   uint     `json:"bet_multiple"`                     //下注倍数
 	Reward        uint     `json:"reward"`                           //此线赢钱

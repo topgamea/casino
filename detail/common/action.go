@@ -25,7 +25,7 @@ func InitMysqlModels(dsn string, syncDb bool) error {
 		return err
 	}
 
-	orm.RegisterModel(new(Game), new(Round), new(SpinNew), new(GenericReward), new(GameStat))
+	orm.RegisterModel(new(Game), new(Round), new(SpinNew), new(GenericReward))
 	if syncDb {
 		err = orm.RunSyncdb("default", false, true)
 		if err != nil {
@@ -85,6 +85,7 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 		}
 	}
 
+	/*
 	if r.GameStat != nil {
 		r.GameStat.Round = r
 		err := UpdateStat(r.GameStat,O)
@@ -93,12 +94,12 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 			return err
 		}
 	}
-
+	*/
 	return nil
 
 }
 
-
+/*
 func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 	tp := &GameStat{
 		Round:gs.Round,
@@ -129,6 +130,7 @@ func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 
 	return err
 }
+*/
 
 func InsertRound(r *Round, O orm.Ormer) error {
 	if r.Game != nil {
@@ -152,6 +154,8 @@ func InsertRound(r *Round, O orm.Ormer) error {
 		}
 	}
 
+	/*
+
 	if r.GameStat != nil {
 		r.GameStat.Round = r
 		err := UpdateStat(r.GameStat,O)
@@ -160,7 +164,7 @@ func InsertRound(r *Round, O orm.Ormer) error {
 			return err
 		}
 	}
-
+	*/
 	return nil
 }
 
@@ -174,7 +178,6 @@ func InsertSpin(s *SpinNew, parentRound *Round, O orm.Ormer) error {
 		return err
 	}
 
-	//logger.Infof("------ spin_id:%v, structId:%v",spin_id, s.Id)
 	for _, rw := range s.RewardDetails {
 		err := InsertGenericReward(rw, s, parentRound, O)
 		if err != nil {
@@ -187,25 +190,16 @@ func InsertSpin(s *SpinNew, parentRound *Round, O orm.Ormer) error {
 }
 
 func InsertGenericReward(gr *GenericReward, parentSpin *SpinNew, parentRound *Round, O orm.Ormer) error {
-	/*
-	if gr.Round == nil {
-		gr.Round = parentRound
-	}
-	*/
+
 	if gr.Spin == nil {
 		gr.Spin = parentSpin
 	}
 
-	rows, err := O.Insert(gr)
+	_, err := O.Insert(gr)
 	if err != nil {
-		logger.Error(err)
 		return err
 	}
 
-	if rows != 1 {
-		logger.Infoln(rows)
-		//return errors.New("unexpected insert GenericReward")
-	}
 	return nil
 }
 
@@ -237,11 +231,12 @@ func GetRound(round string, O orm.Ormer) (*Round, error) {
 		}
 	}
 
+	/*
 	_,err = O.LoadRelated(r,"GameStat")
 	if err != nil {
 		return nil, err
 	}
-
+	*/
 	return r, nil
 
 }
@@ -254,7 +249,6 @@ func GetRoundOnly(round string, O orm.Ormer) (*Round, error) {
 
 	err = O.Read(r)
 	if err != nil {
-		logger.Infoln("=======================")
 		return nil, err
 	}
 

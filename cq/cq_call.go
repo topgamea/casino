@@ -72,6 +72,12 @@ type CQStatus struct {
 	DateTime string `json:"datetime"`
 }
 
+type CQOrderAuth struct {
+	RoundId string `json:"roundid"`
+	Account string `json:"account"`
+	PAccount string `json:"paccount"`
+}
+
 //CQService TODO
 type CQService struct {
 	//Config *server_config.CqGameConfig
@@ -349,4 +355,45 @@ func (s *CQService) Balance(uid string) (float64, error) {
 		return 0, errors.New("get balance error:" + betResponse.Status.Code + betResponse.Status.Message)
 	}
 	return betResponse.Data.Balance, nil
+}
+
+func (s *CQService) DetailAuth(ordertoken string) (*CQOrderAuth, error) {
+
+	url := s.Url + "/gamepool/cq9/game/detailtoken"
+	auth := s.Auth
+
+	params := "token=" + ordertoken
+
+	req, err := http.NewRequest("POST", url, strings.NewReader(params))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Authorization", auth)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &struct {
+		Data CQOrderAuth `json:"data"`
+		Status CQStatus `json:"status"`
+	}{}
+
+	err = json.Unmarshal(body, res)
+	if err != nil {
+		return nil, err
+	}
+	if res.Status.Code != "0" {
+		return nil, errors.New("auth detail token error:" + res.Status.Code + res.Status.Message)
+	}
+	return &res.Data,nil
 }
