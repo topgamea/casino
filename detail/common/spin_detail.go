@@ -31,7 +31,7 @@ type Round struct {
 	Game  *Game      `json:"game" orm:"null;rel(fk);on_delete(set_null)"`
 	Spins []*SpinNew `json:"spin_details" orm:"reverse(many)"`
 
-	GameStat *GameStat `json:"game_stat" orm:"reverse(one)"`
+	//GameStat *GameStat `json:"game_stat" orm:"reverse(one)"`
 
 	CreatedAt time.Time `json:"-" orm:"auto_now_add;type(datetime)"`
 	UpdatedAt time.Time `json:"-" orm:"auto_now;type(datetime)"`
