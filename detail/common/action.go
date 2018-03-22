@@ -64,6 +64,7 @@ func InsertMultiReward(rewards []*GenericReward, O orm.Ormer)  (int64,error) {
 }
 
 func InsertFreeSpin(r *Round, O orm.Ormer) error {
+	/*
 	if r.Game != nil {
 		err := CreateGame(r.Game, O)
 		if err != nil {
@@ -71,6 +72,7 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 			return err
 		}
 	}
+	*/
 
 	_, err := O.InsertOrUpdate(r, "EndTime", "TotalReward")
 	if err != nil {
@@ -133,6 +135,7 @@ func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 */
 
 func InsertRound(r *Round, O orm.Ormer) error {
+	/*
 	if r.Game != nil {
 		err := CreateGame(r.Game, O)
 		if err != nil {
@@ -140,6 +143,7 @@ func InsertRound(r *Round, O orm.Ormer) error {
 			return err
 		}
 	}
+	*/
 
 	_, err := O.Insert(r)
 	if err != nil {
