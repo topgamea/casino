@@ -72,7 +72,7 @@ func (u *SpinNew) TableUnique() [][]string {
 }
 
 type GenericReward struct {
-	//Id int64 `json:"-" orm:"pk;auto"`
+	Id int64 `json:"-" orm:"pk;auto"`
 	//Round         *Round   `json:"-" orm:"rel(fk)"`
 	Spin          *SpinNew `json:"-" orm:"rel(fk)"`
 	LineId        uint     `json:"line_id"`                          //中奖线id  如果是bonus 或者 scatter中奖，就把该值设为 bonus 和 scatter图标
