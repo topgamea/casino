@@ -83,6 +83,7 @@ type GenericReward struct {
 	Multiple      uint     `json:"multiple"`                         // 根据玩法，玩法中如果有乘倍则显示倍数，如果没有则显示1（现阶段只有财神机器有乘倍）
 	ItemNumber    uint8    `json:"item_number"`                      //几连线
 	ItemPositions string   `json:"item_positions" orm:"size(200)"` // json数组 [[column,row]]
+	CombNumber uint8 `json:"comb_number"` 				//该图标中奖组合数，只对全线玩法有效，当前只有辣椒
 }
 
 func (u *GenericReward) TableName() string {
