@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"gopkg.in/resty.v1"
 )
 
 //RandomTokenResponse TODO
@@ -191,6 +192,7 @@ func (s *CQService) Bet(uid string, gameToken string, round string, amount float
 		"mtcode=" + mtcode + "&" +
 		"datetime=" + datetime
 
+	/*
 	req, err := http.NewRequest("POST", url, strings.NewReader(params))
 	if err != nil {
 		return nil, err
@@ -208,8 +210,20 @@ func (s *CQService) Bet(uid string, gameToken string, round string, amount float
 	if err != nil {
 		return nil, err
 	}
+	*/
+
+	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+		map[string]string{
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Authorization": auth,
+		}).Post(url)
+	if err != nil {
+		return nil, err
+	}
+
+
 	var betResponse CQBetResponse
-	err = json.Unmarshal(body, &betResponse)
+	err = json.Unmarshal(resp.Body(), &betResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -242,6 +256,7 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 		"mtcode=" + mtcode + "&" +
 		"datetime=" + datetime
 
+	/*
 	req, err := http.NewRequest("POST", url, strings.NewReader(params))
 	if err != nil {
 		return nil, err
@@ -259,8 +274,19 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 	if err != nil {
 		return nil, err
 	}
+	*/
+	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+		map[string]string{
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Authorization": auth,
+		}).Post(url)
+	if err != nil {
+		return nil, err
+	}
+
+
 	var betResponse CQBetResponse
-	err = json.Unmarshal(body, &betResponse)
+	err = json.Unmarshal(resp.Body(), &betResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -292,6 +318,7 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 		"mtcode=" + mtcode + "&" +
 		"datetime=" + datetime
 
+	/*
 	req, err := http.NewRequest("POST", url, strings.NewReader(params))
 	if err != nil {
 		return nil, err
@@ -309,8 +336,20 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 	if err != nil {
 		return nil, err
 	}
+	*/
+
+	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+		map[string]string{
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Authorization": auth,
+		}).Post(url)
+	if err != nil {
+		return nil, err
+	}
+
+
 	var betResponse CQBetResponse
-	err = json.Unmarshal(body, &betResponse)
+	err = json.Unmarshal(resp.Body(), &betResponse)
 	if err != nil {
 		return nil, err
 	}
