@@ -1,8 +1,8 @@
 package server_config
 
 import (
-	"io/ioutil"
 	"github.com/BurntSushi/toml"
+	"io/ioutil"
 )
 
 type CasinoConfig struct {
@@ -83,4 +83,3 @@ func ParseConfig(filename string) (*CasinoConfig, error) {
 	}
 	return &config, nil
 }
-

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gopkg.in/resty.v1"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
-	"gopkg.in/resty.v1"
 )
 
 //RandomTokenResponse TODO
@@ -74,8 +74,8 @@ type CQStatus struct {
 }
 
 type CQOrderAuth struct {
-	RoundId string `json:"roundid"`
-	Account string `json:"account"`
+	RoundId  string `json:"roundid"`
+	Account  string `json:"account"`
 	PAccount string `json:"paccount"`
 }
 
@@ -109,7 +109,6 @@ func (s *CQService) CreateRandomToken(gameCode string) (string, error) {
 	} else {
 		url = s.Url + "dev/peace/gametoken?account=random"
 	}
-
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -200,34 +199,33 @@ func (s *CQService) Bet(uid string, gameToken string, round string, amount float
 		"datetime=" + datetime
 
 	/*
-	req, err := http.NewRequest("POST", url, strings.NewReader(params))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Authorization", auth)
+		req, err := http.NewRequest("POST", url, strings.NewReader(params))
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("Authorization", auth)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
 	*/
 
 	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
-			"Content-Type": "application/x-www-form-urlencoded",
+			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
 		}).Post(url)
 	if err != nil {
 		return nil, err
 	}
-
 
 	var betResponse CQBetResponse
 	err = json.Unmarshal(resp.Body(), &betResponse)
@@ -250,7 +248,6 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 	auth := s.Auth
 	gameCode := s.Code
 
-
 	loc := time.FixedZone("AST", -4*3600)
 	RFC3339 := "2006-01-02T15:04:05"
 	datetime := time.Now().In(loc).Format(RFC3339) + "-04:00"
@@ -264,33 +261,32 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 		"datetime=" + datetime
 
 	/*
-	req, err := http.NewRequest("POST", url, strings.NewReader(params))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Authorization", auth)
+		req, err := http.NewRequest("POST", url, strings.NewReader(params))
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("Authorization", auth)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
 	*/
 	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
-			"Content-Type": "application/x-www-form-urlencoded",
+			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
 		}).Post(url)
 	if err != nil {
 		return nil, err
 	}
-
 
 	var betResponse CQBetResponse
 	err = json.Unmarshal(resp.Body(), &betResponse)
@@ -326,34 +322,33 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 		"datetime=" + datetime
 
 	/*
-	req, err := http.NewRequest("POST", url, strings.NewReader(params))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Authorization", auth)
+		req, err := http.NewRequest("POST", url, strings.NewReader(params))
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("Authorization", auth)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
 	*/
 
 	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
-			"Content-Type": "application/x-www-form-urlencoded",
+			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
 		}).Post(url)
 	if err != nil {
 		return nil, err
 	}
-
 
 	var betResponse CQBetResponse
 	err = json.Unmarshal(resp.Body(), &betResponse)
@@ -370,7 +365,6 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 func (s *CQService) Balance(uid string) (float64, error) {
 	//url := (s.Config.URL) + "gamepool/cq9/player/balance/" + uid
 	//auth := s.Config.Auth
-
 
 	url := s.Url + "gamepool/cq9/player/balance/" + uid
 	auth := s.Auth
@@ -430,8 +424,8 @@ func (s *CQService) DetailAuth(ordertoken string) (*CQOrderAuth, error) {
 	}
 
 	res := &struct {
-		Data CQOrderAuth `json:"data"`
-		Status CQStatus `json:"status"`
+		Data   CQOrderAuth `json:"data"`
+		Status CQStatus    `json:"status"`
 	}{}
 
 	err = json.Unmarshal(body, res)
@@ -441,5 +435,5 @@ func (s *CQService) DetailAuth(ordertoken string) (*CQOrderAuth, error) {
 	if res.Status.Code != "0" {
 		return nil, errors.New("auth detail token error:" + res.Status.Code + res.Status.Message)
 	}
-	return &res.Data,nil
+	return &res.Data, nil
 }

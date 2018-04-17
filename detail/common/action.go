@@ -51,27 +51,27 @@ func CreateGame(g *Game, O orm.Ormer) error {
 	return nil
 }
 
-func InsertMultiRound(rs []*Round, O orm.Ormer) (int64,error)  {
+func InsertMultiRound(rs []*Round, O orm.Ormer) (int64, error) {
 	return O.InsertMulti(len(rs), rs)
 }
 
-func InsertMultiSpin(spins []*SpinNew, O orm.Ormer)  (int64,error) {
+func InsertMultiSpin(spins []*SpinNew, O orm.Ormer) (int64, error) {
 	return O.InsertMulti(len(spins), spins)
 }
 
-func InsertMultiReward(rewards []*GenericReward, O orm.Ormer)  (int64,error) {
+func InsertMultiReward(rewards []*GenericReward, O orm.Ormer) (int64, error) {
 	return O.InsertMulti(len(rewards), rewards)
 }
 
 func InsertFreeSpin(r *Round, O orm.Ormer) error {
 	/*
-	if r.Game != nil {
-		err := CreateGame(r.Game, O)
-		if err != nil {
-			logger.Error(err)
-			return err
+		if r.Game != nil {
+			err := CreateGame(r.Game, O)
+			if err != nil {
+				logger.Error(err)
+				return err
+			}
 		}
-	}
 	*/
 
 	_, err := O.InsertOrUpdate(r, "EndTime", "TotalReward")
@@ -88,14 +88,14 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 	}
 
 	/*
-	if r.GameStat != nil {
-		r.GameStat.Round = r
-		err := UpdateStat(r.GameStat,O)
-		if err != nil {
-			logger.Error(err)
-			return err
+		if r.GameStat != nil {
+			r.GameStat.Round = r
+			err := UpdateStat(r.GameStat,O)
+			if err != nil {
+				logger.Error(err)
+				return err
+			}
 		}
-	}
 	*/
 	return nil
 
@@ -136,13 +136,13 @@ func UpdateStat(gs *GameStat, O orm.Ormer) error  {
 
 func InsertRound(r *Round, O orm.Ormer) error {
 	/*
-	if r.Game != nil {
-		err := CreateGame(r.Game, O)
-		if err != nil {
-			logger.Error(err)
-			return err
+		if r.Game != nil {
+			err := CreateGame(r.Game, O)
+			if err != nil {
+				logger.Error(err)
+				return err
+			}
 		}
-	}
 	*/
 
 	_, err := O.Insert(r)
@@ -160,14 +160,14 @@ func InsertRound(r *Round, O orm.Ormer) error {
 
 	/*
 
-	if r.GameStat != nil {
-		r.GameStat.Round = r
-		err := UpdateStat(r.GameStat,O)
-		if err != nil {
-			logger.Error(err)
-			return err
+		if r.GameStat != nil {
+			r.GameStat.Round = r
+			err := UpdateStat(r.GameStat,O)
+			if err != nil {
+				logger.Error(err)
+				return err
+			}
 		}
-	}
 	*/
 	return nil
 }
@@ -236,10 +236,10 @@ func GetRound(round string, O orm.Ormer) (*Round, error) {
 	}
 
 	/*
-	_,err = O.LoadRelated(r,"GameStat")
-	if err != nil {
-		return nil, err
-	}
+		_,err = O.LoadRelated(r,"GameStat")
+		if err != nil {
+			return nil, err
+		}
 	*/
 	return r, nil
 
