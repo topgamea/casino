@@ -31,6 +31,7 @@ type Round struct {
 	TotalReward uint64    `json:"total_reward"` //总赢钱
 	TotalBet    uint      `json:"total_bet"`    //下注金额 主游戏有效，freespin时无效
 	BetMultiple uint      `json:"bet_multiple"`
+	BetMode     uint      `json:"bet_mode"` //下注，押一，押二，押三
 
 	Game  *Game      `json:"game" orm:"null;rel(fk);on_delete(set_null)"`
 	Spins []*SpinNew `json:"spin_details" orm:"reverse(many)"`
