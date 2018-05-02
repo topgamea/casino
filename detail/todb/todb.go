@@ -19,13 +19,10 @@ type JsonResp struct {
 }
 
 func SaveToDb(r *common.Round, toUrl string) error {
-	//url := fmt.Sprintf("%s/gamedetail/round", GetCasinoConfig().GameDetailConfig.Url)
-
-	//res, err := resty.DefaultClient.R().SetHeader("Content-Type", "application/json").SetBody(r).Post(url)
 
 	res, err := resty.DefaultClient.R().SetQueryParams(map[string]string{
-		//"freespin":freespinStr,
-		"user": r.UserId,
+		"user":    r.UserId,
+		"game_id": r.Game.GameId,
 	}).SetHeader("Content-Type", "application/json").SetBody(r).Post(toUrl)
 	if err != nil {
 		//logger.Error(err.Error())
@@ -35,12 +32,10 @@ func SaveToDb(r *common.Round, toUrl string) error {
 	js := &JsonResp{}
 	err = json.Unmarshal(res.Body(), js)
 	if err != nil {
-		//logger.Error(err.Error())
 		return err
 	}
 
 	if js.Status.Code != 0 {
-		//logger.Error(js.Status.Message)
 		return errors.New(js.Status.Message)
 	}
 	return nil

@@ -216,7 +216,7 @@ func (s *CQService) Bet(uid string, gameToken string, round string, amount float
 		}
 	*/
 
-	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+	resp, err := resty.SetTimeout(3000 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
 			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
@@ -277,7 +277,7 @@ func (s *CQService) BetWin(uid string, gameToken string, round string, amount fl
 			return nil, err
 		}
 	*/
-	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+	resp, err := resty.SetTimeout(3000 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
 			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
@@ -339,7 +339,7 @@ func (s *CQService) BetEnd(uid string, gameToken string, round string, amount fl
 		}
 	*/
 
-	resp, err := resty.SetTimeout(700 * time.Millisecond).R().SetBody(params).SetHeaders(
+	resp, err := resty.SetTimeout(3000 * time.Millisecond).R().SetBody(params).SetHeaders(
 		map[string]string{
 			"Content-Type":  "application/x-www-form-urlencoded",
 			"Authorization": auth,
