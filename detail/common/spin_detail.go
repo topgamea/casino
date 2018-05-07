@@ -58,7 +58,8 @@ type SpinNew struct {
 	BetTime          time.Time `json:"bet_time" orm:"type(datetime)"` //下注时间 XXXX/XX/XX XX:XX:XX
 	RewardLineNumber uint8     `json:"reward_line_number"`            //赢钱线数
 
-	Items         string           `json:"items" orm:"size(500)"`              //json数组 [[int]]                       //旋转结果，一个子数组字代表一列
+	Items         string           `json:"items" orm:"size(500)"` //json数组 [[int]]                       //旋转结果，一个子数组字代表一列
+	AssistItems   string           `json:"assist_items" orm:"size(500)"`  // json数组 [[int]] 辅助轮
 	RewardDetails []*GenericReward `json:"reward_details" orm:"reverse(many)"` //包含中scatter bonus jackpot 线等各种中奖
 
 	CreatedAt time.Time `json:"-" orm:"auto_now_add;type(datetime)"`
@@ -80,7 +81,7 @@ type GenericReward struct {
 	//Round         *Round   `json:"-" orm:"rel(fk)"`
 	Spin        *SpinNew `json:"-" orm:"rel(fk)"`
 	LineId      uint     `json:"line_id"`                      //中奖线id  如果是bonus 或者 scatter中奖，就把该值设为 bonus 和 scatter图标
-	RewardType  uint8    `json:"reward_type"`                  // 0 item中奖 1 freespin  2 bonus 3 jackpot 4 superrespin 5 背景轮中奖
+	RewardType  uint8    `json:"reward_type"`                  // 0 item中奖 1 freespin  2 bonus 3 jackpot 4 superrespin 5 背景轮中奖 6 scatter
 	RewardItems string   `json:"reward_items" orm:"size(100)"` //json数组 [int] 中奖图标 对于美人鱼，只有一个图标；红唇会有多个图标
 	//BetMultiple   uint     `json:"bet_multiple"`                     //下注倍数
 	Reward        uint   `json:"reward"`                         //此线赢钱
