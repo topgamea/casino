@@ -100,6 +100,28 @@ func MoveOldDataToHis(dividingTime time.Time, execHour int, Oc, Oh orm.Ormer) er
 
 }
 
+func DeleteOldData(dividingTime time.Time, execHour int, Oc orm.Ormer) error {
+	tn := time.Now().Local()
+	if execHour != -1 && tn.Hour() != execHour {
+		return nil
+	}
+
+	rs, err := GetOldData(dividingTime, Oc)
+	if err != nil {
+		return err
+	}
+
+	for _, r := range rs {
+		err = deleteRound(r, Oc)
+		if err != nil {
+			logger.Error(err)
+			continue
+		}
+	}
+
+	return nil
+}
+
 func deleteRound(r *Round, O orm.Ormer) error {
 	var err error
 	for _, sp := range r.Spins {

@@ -64,16 +64,6 @@ func InsertMultiReward(rewards []*GenericReward, O orm.Ormer) (int64, error) {
 }
 
 func InsertFreeSpin(r *Round, O orm.Ormer) error {
-	/*
-		if r.Game != nil {
-			err := CreateGame(r.Game, O)
-			if err != nil {
-				logger.Error(err)
-				return err
-			}
-		}
-	*/
-
 	_, err := O.InsertOrUpdate(r, "EndTime", "TotalReward")
 	if err != nil {
 		logger.Error(err)
@@ -87,63 +77,11 @@ func InsertFreeSpin(r *Round, O orm.Ormer) error {
 		}
 	}
 
-	/*
-		if r.GameStat != nil {
-			r.GameStat.Round = r
-			err := UpdateStat(r.GameStat,O)
-			if err != nil {
-				logger.Error(err)
-				return err
-			}
-		}
-	*/
 	return nil
 
 }
 
-/*
-func UpdateStat(gs *GameStat, O orm.Ormer) error  {
-	tp := &GameStat{
-		Round:gs.Round,
-	}
-	_,id,err := O.ReadOrCreate(tp,"Round")
-	if err != nil {
-		return err
-	}
-	if tp.HitJackpot || gs.HitJackpot {
-		gs.HitJackpot = true
-	}
-
-	if tp.HitFreespin || gs.HitFreespin {
-		gs.HitFreespin = true
-	}
-
-	if tp.HitRespin || gs.HitRespin {
-		gs.HitRespin = true
-	}
-
-	if tp.HitBonus || gs.HitBonus {
-		gs.HitBonus = true
-	}
-
-	gs.Id = uint64(id)
-
-	_,err = O.Update(gs,"HitJackpot","HitFreespin","HitRespin", "HitBonus")
-
-	return err
-}
-*/
-
 func InsertRound(r *Round, O orm.Ormer) error {
-	/*
-		if r.Game != nil {
-			err := CreateGame(r.Game, O)
-			if err != nil {
-				logger.Error(err)
-				return err
-			}
-		}
-	*/
 
 	_, err := O.Insert(r)
 	if err != nil {
@@ -158,17 +96,6 @@ func InsertRound(r *Round, O orm.Ormer) error {
 		}
 	}
 
-	/*
-
-		if r.GameStat != nil {
-			r.GameStat.Round = r
-			err := UpdateStat(r.GameStat,O)
-			if err != nil {
-				logger.Error(err)
-				return err
-			}
-		}
-	*/
 	return nil
 }
 
@@ -215,32 +142,30 @@ func GetRound(round string, O orm.Ormer) (*Round, error) {
 
 	err = O.Read(r)
 	if err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 
 	_, err = O.LoadRelated(r, "Game", true)
 	if err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 
 	_, err = O.LoadRelated(r, "Spins", true)
 	if err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 
 	for _, sp := range r.Spins {
 		_, err := O.LoadRelated(sp, "RewardDetails", true)
 		if err != nil {
+			logger.Error(err)
 			return nil, err
 		}
 	}
 
-	/*
-		_,err = O.LoadRelated(r,"GameStat")
-		if err != nil {
-			return nil, err
-		}
-	*/
 	return r, nil
 
 }
