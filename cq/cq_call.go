@@ -99,13 +99,13 @@ func NewCqService(url, auth, code string) *CQService {
 //CreateRandomToken TODO
 func (s *CQService) CreateRandomToken(gameCode string) (string, error) {
 
-	url := s.Url + "peace/gametoken?account=random&gametype=slot&gamecode="
+	url := s.Url + "dev/peace/gametoken?account=random&gametype=slot&gamecode="
 	auth := s.Auth
 
 	if gameCode != "" {
 		url += gameCode
 	} else {
-		url = s.Url + "peace/gametoken?account=random"
+		url = s.Url + "dev/peace/gametoken?account=random"
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
